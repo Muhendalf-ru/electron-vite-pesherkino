@@ -1,0 +1,89 @@
+INFO network: updated default interface Ethernet, index 4
+INFO network: updated default interface Ethernet, index 4
+INFO network: updated default interface Ethernet, index 4
+INFO network: updated default interface Ethernet, index 4
+INFO network: updated default interface Ethernet, index 4
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.133s)
+INFO [3002026260 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:56853
+INFO [2217013176 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:56944
+INFO [2217013176 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.182:50004
+INFO [2217013176 3ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.182:50004
+INFO [2217013176 3ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.182:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.166s)
+INFO [1085550398 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:56983
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.155s)
+INFO [3624580457 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:57534
+INFO [2147212430 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:57587
+INFO [2147212430 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.156:50004
+INFO [2147212430 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.156:50004
+INFO [2147212430 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.156:50004
+INFO [1968172790 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:57660
+INFO [5706812 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:57661
+INFO [1968172790 2ms] inbound/socks[socks-in]: inbound packet connection to 35.214.132.105:50007
+INFO [5706812 1ms] inbound/socks[socks-in]: inbound packet connection to 35.214.132.105:50007
+INFO [1968172790 2ms] outbound/vless[proxy]: outbound packet connection to 35.214.132.105:50007
+INFO [1968172790 2ms] outbound/vless[proxy]: outbound packet connection to 35.214.132.105:50007
+INFO [5706812 1ms] outbound/vless[proxy]: outbound packet connection to 35.214.132.105:50007
+INFO [5706812 1ms] outbound/vless[proxy]: outbound packet connection to 35.214.132.105:50007
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.155s)
+INFO [3228587848 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:58274
+INFO [439612896 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:58347
+INFO [439612896 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.143:50004
+INFO [439612896 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.143:50004
+INFO [439612896 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.143:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.155s)
+INFO [2217955575 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:59068
+INFO [1892323034 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:59129
+INFO [1892323034 1ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.155:50004
+INFO [1892323034 1ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.155:50004
+INFO [1892323034 1ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.155:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.155s)
+INFO [3310107001 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:59137
+INFO [1350892672 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:59216
+INFO [1350892672 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.193:50004
+INFO [1350892672 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.193:50004
+INFO [1350892672 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.193:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.133s)
+INFO [3156794024 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:60097
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.144s)
+INFO [4059057083 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:65327
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.144s)
+INFO [3009515599 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49218
+INFO [2079918514 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49284
+INFO [2079918514 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.151:50004
+INFO [2079918514 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.151:50004
+INFO [2079918514 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.151:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.144s)
+INFO [664142785 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49484
+INFO [3435837880 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49553
+INFO [3435837880 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.139:50004
+INFO [3435837880 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.139:50004
+INFO [3435837880 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.139:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.155s)
+INFO [2999995001 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49782
+INFO [4219777077 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:49867
+INFO [4219777077 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.152:50004
+INFO [4219777077 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.152:50004
+INFO [4219777077 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.152:50004

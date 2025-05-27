@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    ".history": true,
+    "node_modules": true,
+    ".gitattributes": true
+  },
+  "eslint.useFlatConfig": true,
+  "eslint.validate": ["javascript", "typescript"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  }
+}

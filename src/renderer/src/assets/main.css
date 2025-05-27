@@ -1,0 +1,138 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1e202f; /* Темный основной фон */
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgb(99, 141, 240) 0%, rgba(30, 30, 47, 0) 70%);
+  border-radius: 50%;
+  animation: pulse 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.8);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.5;
+  }
+}
+
+.container {
+  background-color: rgba(41, 43, 58, 0.9);
+  padding: 2rem;
+  border-radius: 8px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.5s ease;
+}
+
+.vpn-on {
+  box-shadow: 0 0 15px rgba(0, 255, 100, 0.6); /* Зеленый */
+}
+
+.vpn-off {
+  box-shadow: 0 0 15px rgba(255, 50, 50, 0.6); /* Красный */
+}
+
+input[type='text'] {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #3a3c57;
+  color: #eee;
+  outline: none;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+input[type='text']:focus {
+  background-color: #50537a;
+}
+
+button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #4b79e6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+button:hover:not(:disabled) {
+  background-color: #3756b3;
+}
+
+button:disabled {
+  background-color: #414657;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: center;
+  min-height: 1.2em;
+}
+
+.link-button {
+  flex: 1;
+  padding: 0.6rem;
+  background-color: transparent;
+  color: #4b79e6;
+  border: 2px solid #4b79e6;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.link-button:hover {
+  background-color: #4b79e6;
+  color: white;
+}
