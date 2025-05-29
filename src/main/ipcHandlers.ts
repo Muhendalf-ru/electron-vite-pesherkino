@@ -27,8 +27,6 @@ ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
 
     const configData = await fetchConfig(telegramId)
 
-    // saveTelegramId(telegramId)
-
     const singboxPath = getSingboxPath()
     const configPath = path.join(singboxPath, 'config.json')
     fs.writeFileSync(configPath, configData)
@@ -86,15 +84,15 @@ ipcMain.handle('save-telegram-id', async (_event, telegramId: string) => {
 //   if (win) win.minimize()
 // })
 
-// ipcMain.on('window-maximize', (event) => {
-//   const win = BrowserWindow.fromWebContents(event.sender)
-//   if (!win) return
-//   if (win.isMaximized()) {
-//     win.unmaximize()
-//   } else {
-//     win.maximize()
-//   }
-// })
+ipcMain.on('window-maximize', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (!win) return
+  if (win.isMaximized()) {
+    win.unmaximize()
+  } else {
+    win.maximize()
+  }
+})
 
 ipcMain.on('window-close', (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)

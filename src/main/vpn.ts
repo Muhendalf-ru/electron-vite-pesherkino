@@ -28,7 +28,7 @@ export function saveTelegramId(id: string): void {
   fs.writeFileSync(filePath, id, 'utf-8')
 }
 
-const baseUrl = process.env.VITE_VPN_CONFIG_URL;
+const baseUrl = process.env.VITE_VPN_CONFIG_URL || 'https://sub.pesherkino.store:8443/pesherkino/vpn/config';
 
 export async function fetchConfig(telegramId: string): Promise<Buffer> {
 const url = `${baseUrl}/${telegramId}`;

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain} from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { createWindow } from './window'
 import { createTray } from './tray'
@@ -60,11 +60,7 @@ function setupApp(): void {
     mainWindow?.webContents.send('update-message', 'Обновлений нет')
   })
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0 && mainWindow === null) {
-      mainWindow = createWindow()
-    }
-  })
+
 }
 
 app.whenReady().then(setupApp)

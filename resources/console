@@ -131,3 +131,7 @@ INFO network: updated default interface Ethernet, index 4
 INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
 INFO sing-box started (0.100s)
 INFO [236374459 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:58888
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.111s)
+INFO [1544062230 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:60980

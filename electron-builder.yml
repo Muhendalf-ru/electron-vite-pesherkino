@@ -43,7 +43,7 @@ npmRebuild: false
 publish:
   provider: github
   owner: Muhendalf-ru
-  repo: electron-vite-pesherkino
+  repo: pesherkino-vpn
   releaseType: release
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/pesherkino-vpn-2.0.х-setup.exe
