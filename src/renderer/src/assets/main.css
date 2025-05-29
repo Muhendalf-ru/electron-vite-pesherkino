@@ -8,44 +8,8 @@ body {
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #1e202f; /* Темный основной фон */
+  background-color: #1e202f; 
   color: #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  position: relative;
-  z-index: 0;
-}
-
-body::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgb(99, 141, 240) 0%, rgba(30, 30, 47, 0) 70%);
-  border-radius: 50%;
-  animation: pulse 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@keyframes pulse {
-  0% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateX(-50%) scale(1.8);
-    opacity: 0.1;
-  }
-  100% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.5;
-  }
 }
 
 .container {
@@ -67,6 +31,7 @@ body::before {
 .vpn-off {
   box-shadow: 0 0 15px rgba(255, 50, 50, 0.6); /* Красный */
 }
+
 
 input[type='text'] {
   width: 100%;
@@ -109,6 +74,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
+
 .status {
   margin-top: 1rem;
   font-weight: bold;
@@ -116,23 +82,14 @@ button:disabled {
   min-height: 1.2em;
 }
 
-.link-button {
-  flex: 1;
-  padding: 0.6rem;
-  background-color: transparent;
-  color: #4b79e6;
-  border: 2px solid #4b79e6;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
-  -webkit-user-select: none;
-  user-select: none;
+.header_wrapper {
+  display: flex;
+  gap: 50px;
 }
 
-.link-button:hover {
-  background-color: #4b79e6;
-  color: white;
+ul {
+  display: flex;
+  gap: 30px;
 }
+
+

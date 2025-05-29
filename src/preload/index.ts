@@ -5,7 +5,11 @@ const api = {
   getTelegramId: () => ipcRenderer.invoke('get-telegram-id'),
   checkVpnStatus: () => ipcRenderer.invoke('check-vpn-status'),
   stopVpn: () => ipcRenderer.invoke('stop-vpn'),
-  deleteDiscordFiles: () => ipcRenderer.invoke('delete-discord-files')
+  saveTelegramId: (id: string) => ipcRenderer.invoke('save-telegram-id', id),
+  deleteDiscordFiles: () => ipcRenderer.invoke('delete-discord-files'),
+  minimize: () => ipcRenderer.send('window-minimize'),
+  maximize: () => ipcRenderer.send('window-maximize'),
+  close: () => ipcRenderer.send('window-close')
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

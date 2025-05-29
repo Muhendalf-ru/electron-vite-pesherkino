@@ -12,9 +12,27 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        '@': resolve('src/renderer/src') // для корректного @import '@/styles/variables.scss'
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@/styles/variables" as *;`
+        }
+      }
+    },
+    server: {
+      proxy: {
+        '/api/vpn': {
+          target: 'https://sub.pesherkino.store:8443',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api\/vpn/, '/pesherkino/vpn')
+        }
+      }
+    }
   }
 })
