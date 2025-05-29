@@ -103,3 +103,27 @@ INFO [2078109805 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1
 INFO [2078109805 1ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.162:50004
 INFO [2078109805 5ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.162:50004
 INFO [2078109805 5ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.162:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.177s)
+INFO [2939679765 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:53295
+INFO [2916109718 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:53353
+INFO [2916109718 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.145:50004
+INFO [2916109718 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.145:50004
+INFO [2916109718 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.145:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.133s)
+INFO [4288524103 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:56001
+INFO [2906937141 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:56059
+INFO [2906937141 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.193:50004
+INFO [2906937141 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.193:50004
+INFO [2906937141 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.193:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.133s)
+INFO [1442114524 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:59994
+INFO [317506738 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:60053
+INFO [317506738 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.170:50004
+INFO [317506738 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.170:50004
+INFO [317506738 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.170:50004

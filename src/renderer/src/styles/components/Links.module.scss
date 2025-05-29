@@ -1,5 +1,5 @@
 .user-info {
-  background-color: rgba(41, 43, 58, 0.9); /* заменено с #1c1d22 */
+  background-color: rgba(41, 43, 58, 0.9);
   border-radius: 12px;
   max-width: 95%;
   width: 600px;
@@ -9,19 +9,68 @@
   font-size: 0.95rem;
   border: 1px solid #2a2b31;
 
-  h2,h3 {
+  h2, h3 {
     margin-bottom: 1.5rem;
     color: #ffffff;
-    font-size: 1.6rem;
-    text-align: center;
     font-weight: 600;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.6rem;
   }
 
   h3 {
-    margin-bottom: 1rem;
     font-size: 1.2rem;
     color: #f0f0f0;
     font-weight: 500;
+    margin-bottom: 1rem;
+
+    // Контейнер для заголовка и кнопки
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    button.toggle-links {
+      background: none;
+      border: 1.8px solid #4da3ff;
+      border-radius: 8px;
+      padding: 0.25rem 0.7rem 0.25rem 0.5rem;
+      font-size: 0.95rem;
+      color: #4da3ff;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      -webkit-user-select: none;
+      user-select: none;
+
+      &:hover {
+        background-color: #4da3ff;
+        color: #1c1d22;
+        border-color: #4da3ff;
+      }
+
+      // Иконка стрелки справа
+      &::after {
+        content: '';
+        display: inline-block;
+        margin-left: 6px;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-style: solid;
+        border-width: 0.15em 0.15em 0 0;
+        border-color: currentColor;
+        transform: rotate(45deg);
+        transition: transform 0.3s ease;
+      }
+
+      &[aria-expanded='true']::after {
+        transform: rotate(-135deg);
+      }
+    }
   }
 
   &::before {
@@ -33,7 +82,7 @@
 
   &.loading {
     color: #4b79e6;
-    border-color: #4b79e6; /* чуть ярче */
+    border-color: #4b79e6;
 
     &::before {
       background: url('data:image/svg+xml;utf8,<svg fill="%234b79e6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" stroke="%234b79e6" stroke-width="5" stroke-linecap="round" fill="none" stroke-dasharray="31.4 31.4" stroke-dashoffset="0"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" from="0 25 25" to="360 25 25"/></circle></svg>') no-repeat center center;
@@ -62,7 +111,7 @@
   }
 
   .section {
-    background: #1e202f; /* заменено с #2a2b31 */
+    background: #1e202f;
     padding: 1.5rem;
     border-radius: 10px;
     border: 1px solid #3b3c42;

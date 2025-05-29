@@ -9,6 +9,7 @@ export function createWindow(): BrowserWindow {
     resizable: false,
     autoHideMenuBar: true,
     show: true,
+    title: 'Pesherkino VPN',
     frame: false,
     ...(process.platform === 'linux'
       ? { icon: path.join(__dirname, '../../resources/icon.png') }

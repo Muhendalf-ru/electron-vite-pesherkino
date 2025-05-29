@@ -43,7 +43,7 @@
 .discord-button {
   width: 100%;
   padding: 0.7rem;
-  background-color: #4b79e6;
+  background-color: #395fb6;
   color: white;
   border: none;
   border-radius: 4px;
@@ -54,7 +54,7 @@
   box-sizing: border-box;
 
   &:hover:not(:disabled) {
-    background-color: #3756b3;
+    background-color: #5c73b9;
   }
 
   &:disabled {
@@ -63,10 +63,10 @@
   }
 
   &--danger {
-    background-color: #e64b4b;
+    background-color: #c44040;
 
     &:hover:not(:disabled) {
-      background-color: #b33737;
+      background-color: #a85959;
     }
   }
 }
@@ -78,25 +78,98 @@
   min-height: 1.2em;
 
   &--error {
-    color: #ff5a5a;
+    color: #c94545;
   }
 
   &--success {
-    color: #4cff4c;
+    color: #32a832;
   }
 }
 
 .discord-title {
   text-align: center;
   font-size: 1.5rem;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .discord-wrapper {
   height: 77vh;
+  overflow-y: auto;
   width: 100%;
   max-width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
+  flex-direction: column;
 }
+
+.discord-help-icon {
+  background: transparent;
+  border: none;
+  color: #8ab4f8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  margin-top: 12px;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: color 0.3s ease;
+  width: 15%;
+
+  &:hover {
+    color: #62a0ff;
+  }
+
+  &:focus {
+    outline: 2px solid #62a0ff;
+    outline-offset: 2px;
+  }
+}
+
+.discord-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); // затемнение фона
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // поверх всего приложения
+}
+
+.discord-warning-modal {
+  background-color: #292b3a; // можно такой же фон, как у контейнера
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: #eee;
+  position: relative;
+}
+
+.discord-warnng-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #eee;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    color: #62a0ff;  // светло-голубой при наведении
+  }
+
+  &:active {
+    transform: scale(0.85);  // чуть уменьшается при нажатии
+  }
+
+}
+

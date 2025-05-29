@@ -52,7 +52,7 @@ function Header(): React.JSX.Element {
 
       <input
         className="telegram_input"
-        type="text"
+        type="password"
         placeholder="Telegram ID"
         value={inputValue}
         onChange={handleChange}

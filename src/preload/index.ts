@@ -7,8 +7,8 @@ const api = {
   stopVpn: () => ipcRenderer.invoke('stop-vpn'),
   saveTelegramId: (id: string) => ipcRenderer.invoke('save-telegram-id', id),
   deleteDiscordFiles: () => ipcRenderer.invoke('delete-discord-files'),
-  minimize: () => ipcRenderer.send('window-minimize'),
-  maximize: () => ipcRenderer.send('window-maximize'),
+  // minimize: () => ipcRenderer.send('window-minimize'),
+  // maximize: () => ipcRenderer.send('window-maximize'),
   close: () => ipcRenderer.send('window-close')
 }
 

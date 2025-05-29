@@ -1,23 +1,9 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useCallback, useMemo } from 'react'
 import { useTelegram } from '@renderer/hooks/useTelegram'
-
-type AdminLink = {
-  link: string
-  expiryTime: string
-  location: string
-  _id: string
-}
-
-type UserInfoType = {
-  telegramId: string
-  staticLink: string
-  email?: string
-  uuid?: string
-  vlessLinks: AdminLink[]
-  vlessLinksLite: AdminLink[]
-  promoLinks: AdminLink[]
-  adminLinks: AdminLink[]
-}
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@renderer/redux/store'
+import { toggleShowLinks } from '@renderer/redux/slice/uiSlice'
+import { fetchUserInfo } from '@renderer/redux/slice/userSlice'
 
 type DisplayLink = {
   link: string
@@ -29,53 +15,16 @@ type DisplayLink = {
 
 const UserInfo: React.FC = () => {
   const { telegramId } = useTelegram()
+  const dispatch = useDispatch<AppDispatch>()
 
-  const [data, setData] = useState<UserInfoType | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { data, loading, error } = useSelector((state: RootState) => state.userInfo)
+  const showLinks = useSelector((state: RootState) => state.ui.showLinks)
 
   useEffect(() => {
-    if (!telegramId) {
-      setError('Telegram ID не найден')
-      setData(null)
-      setLoading(false)
-      return
+    if (telegramId && !data) {
+      dispatch(fetchUserInfo(telegramId))
     }
-
-    const fetchUserInfo = async (): Promise<void> => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const res = await fetch(`/api/vpn/info/${telegramId}`)
-
-        if (!res.ok) {
-          throw new Error(`Ошибка HTTP: ${res.status} ${res.statusText}`)
-        }
-
-        const json = await res.json()
-        if (!json) {
-          throw new Error('Пустой ответ от сервера')
-        }
-
-        setData(json)
-      } catch (err: unknown) {
-        console.error('Ошибка при загрузке данных:', err)
-        if (err instanceof Error) {
-          setError(err.message)
-        } else if (typeof err === 'string') {
-          setError(err)
-        } else {
-          setError('Неизвестная ошибка')
-        }
-        setData(null)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchUserInfo()
-  }, [telegramId])
+  }, [telegramId, dispatch, data])
 
   const copyToClipboard = useCallback(async (text: string) => {
     try {
@@ -165,41 +114,53 @@ const UserInfo: React.FC = () => {
         )}
       </div>
 
-      <h3>Все ссылки</h3>
+      <h3>
+        <button
+          type="button"
+          onClick={() => dispatch(toggleShowLinks())}
+          className="toggle-links"
+          aria-expanded={showLinks}
+          aria-label={showLinks ? 'Скрыть ссылки' : 'Показать ссылки'}
+        >
+          {showLinks ? 'Скрыть ссылки' : 'Показать ссылки'}
+        </button>
+      </h3>
 
-      <div className="section">
-        {allLinks.length > 0 ? (
-          allLinks.map(({ link, expiryTime, location, _id, type }) => (
-            <div key={_id} className="admin-link">
-              <p>
-                <strong>Тип:</strong> {type}
-              </p>
-              {location && (
+      {showLinks && (
+        <div className="section">
+          {allLinks.length > 0 ? (
+            allLinks.map(({ link, expiryTime, location, _id, type }) => (
+              <div key={_id} className="admin-link">
                 <p>
-                  <strong>Локация:</strong> {location}
+                  <strong>Тип:</strong> {type}
                 </p>
-              )}
-              {expiryTime && expiryTime !== '1970-01-01T00:00:00.000Z' && (
+                {location && (
+                  <p>
+                    <strong>Локация:</strong> {location}
+                  </p>
+                )}
+                {expiryTime && expiryTime !== '1970-01-01T00:00:00.000Z' && (
+                  <p>
+                    <strong>Срок:</strong> {new Date(expiryTime).toLocaleString()}
+                  </p>
+                )}
                 <p>
-                  <strong>Срок:</strong> {new Date(expiryTime).toLocaleString()}
+                  <strong>Ссылка: </strong>
+                  <span
+                    className="copyable"
+                    onClick={() => copyToClipboard(link)}
+                    title="Кликните, чтобы скопировать"
+                  >
+                    Копировать
+                  </span>
                 </p>
-              )}
-              <p>
-                <strong>Ссылка: </strong>
-                <span
-                  className="copyable"
-                  onClick={() => copyToClipboard(link)}
-                  title="Кликните, чтобы скопировать"
-                >
-                  Копировать
-                </span>
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>Ссылок нет</p>
-        )}
-      </div>
+              </div>
+            ))
+          ) : (
+            <p>Ссылок нет</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

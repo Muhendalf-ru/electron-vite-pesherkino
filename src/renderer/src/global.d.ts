@@ -12,7 +12,7 @@ declare global {
 
       // Новые методы для кастомного заголовка окна
       minimize?: () => void
-      maximize?: () => void
+      // maximize?: () => void
       close?: () => void
     }
   }

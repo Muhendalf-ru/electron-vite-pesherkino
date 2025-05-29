@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: electron-vite-pesherkino
+productName: pesherkino-vpn
 directories:
   buildResources: build
 files:
@@ -14,7 +14,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-vite-pesherkino
+  executableName: pesherkino-vpn
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

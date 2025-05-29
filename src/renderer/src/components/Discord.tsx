@@ -1,5 +1,6 @@
 import { useTelegram } from '@renderer/hooks/useTelegram'
 import React, { useEffect, useState } from 'react'
+import { DiscordVpnWarningTab } from './DiscordWariningTab'
 
 function Discord(): React.JSX.Element {
   const { telegramId, setTelegramId } = useTelegram()
@@ -8,13 +9,13 @@ function Discord(): React.JSX.Element {
   const [isError, setIsError] = useState(false)
   const [vpnRunning, setVpnRunning] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [showWarning, setShowWarning] = useState(false) // для показа/скрытия таба
 
   useEffect(() => {
     const check = async (): Promise<void> => {
       const running = await window.electronAPI.checkVpnStatus()
       setVpnRunning(running)
 
-      // Получаем telegramId из файла, если нет — ошибка
       const savedId = await window.electronAPI.getTelegramId()
       if (savedId) {
         setTelegramId(savedId)
@@ -89,13 +90,28 @@ function Discord(): React.JSX.Element {
     }
   }
 
+  const toggleWarning = (): void => {
+    setShowWarning((prev) => !prev)
+  }
+
   return (
     <div className="discord-wrapper">
       <div className={`discord-container ${vpnRunning ? 'vpn-on' : 'vpn-off'}`}>
-        <h1 className="discord-title">Install Proxy for Discord</h1>
+        <h1 className="discord-title">
+          Discord Proxy
+          {/* Иконка подсказки */}
+          <button
+            className="discord-help-icon"
+            onClick={toggleWarning}
+            aria-label={showWarning ? 'Скрыть предупреждение' : 'Показать предупреждение'}
+            title={showWarning ? 'Скрыть предупреждение' : 'Показать предупреждение'}
+            type="button"
+          >
+            ℹ️
+          </button>
+        </h1>
 
-        {/* input убран */}
-
+        {/* Кнопки управления */}
         <button
           onClick={handleRunVpnSetup}
           className="discord-button"
@@ -124,6 +140,26 @@ function Discord(): React.JSX.Element {
           </p>
         )}
       </div>
+
+      {/* Вкладка предупреждения, видна только если showWarning=true */}
+      {showWarning && (
+        <div className="discord-overlay" onClick={() => setShowWarning(false)}>
+          <div
+            className="discord-warning-modal"
+            onClick={(e) => e.stopPropagation()} // чтобы клик по модалке не закрывал её
+          >
+            <DiscordVpnWarningTab />
+            {/* Добавим кнопку закрытия */}
+            <button
+              className="discord-warnng-button"
+              onClick={() => setShowWarning(false)}
+              aria-label="Закрыть предупреждение"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
