@@ -24,15 +24,5 @@ export default defineConfig({
         }
       }
     },
-    server: {
-      proxy: {
-        '/api/vpn': {
-          target: 'https://sub.pesherkino.store:8443',
-          changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace(/^\/api\/vpn/, '/pesherkino/vpn')
-        }
-      }
-    }
   }
 })

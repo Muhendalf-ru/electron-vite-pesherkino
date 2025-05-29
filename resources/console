@@ -127,3 +127,7 @@ INFO [317506738 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:
 INFO [317506738 0ms] inbound/socks[socks-in]: inbound packet connection to 104.29.158.170:50004
 INFO [317506738 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.170:50004
 INFO [317506738 0ms] outbound/vless[proxy]: outbound packet connection to 104.29.158.170:50004
+INFO network: updated default interface Ethernet, index 4
+INFO inbound/socks[socks-in]: tcp server started at 127.0.0.1:1080
+INFO sing-box started (0.100s)
+INFO [236374459 0ms] inbound/socks[socks-in]: inbound connection from 127.0.0.1:58888

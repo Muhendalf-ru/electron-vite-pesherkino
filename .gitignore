@@ -7,3 +7,4 @@ out
 resources/telegram_id.txt
 resources/config.json
 resources/console
+.env

@@ -5,7 +5,7 @@ function Main(): React.ReactElement {
   return (
     <>
       <UserInfo />
-      <h1>Test Content</h1>
+      <h1>Waiting for update</h1>
     </>
   )
 }

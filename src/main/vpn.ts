@@ -3,6 +3,7 @@ import fs from 'fs'
 import { spawn, exec } from 'child_process'
 import axios from 'axios'
 import { app } from 'electron'
+import 'dotenv/config'
 
 const isDev = !app.isPackaged
 
@@ -27,8 +28,10 @@ export function saveTelegramId(id: string): void {
   fs.writeFileSync(filePath, id, 'utf-8')
 }
 
+const baseUrl = process.env.VITE_VPN_CONFIG_URL;
+
 export async function fetchConfig(telegramId: string): Promise<Buffer> {
-  const url = `https://sub.pesherkino.store:8443/pesherkino/vpn/config/${telegramId}`
+const url = `${baseUrl}/${telegramId}`;
   const response = await axios.get(url, { responseType: 'arraybuffer' })
 
   const responseText = response.data.toString()

@@ -41,7 +41,9 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: Muhendalf-ru
+  repo: electron-vite-pesherkino
+  releaseType: release
 electronDownload:
-  mirror: https://npmmirror.com/mirrors/electron/
+  mirror: https://npmmirror.com/mirrors/electron/pesherkino-vpn-2.0.х-setup.exe

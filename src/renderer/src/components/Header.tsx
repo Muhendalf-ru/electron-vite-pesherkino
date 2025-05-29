@@ -10,26 +10,49 @@ function Header(): React.JSX.Element {
 
   const { telegramId, setTelegramId } = useTelegram()
   const [inputValue, setInputValue] = useState('')
+  const [updateStatus, setUpdateStatus] = useState('') // статус автообновлений
 
-  // При загрузке компонента пытаемся получить сохранённый telegramId и установить в input
   useEffect(() => {
     if (telegramId) {
       setInputValue(telegramId)
     }
   }, [telegramId])
 
+  useEffect(() => {
+    // Подписка на сообщения от main процесса об обновлениях
+    if (window.electronAPI?.onUpdateMessage) {
+      const handler = (msg: string): void => {
+        setUpdateStatus(msg)
+      }
+      const unsubscribe = window.electronAPI.onUpdateMessage(handler)
+      // Очистка подписки при размонтировании
+      return () => {
+        if (typeof unsubscribe === 'function') {
+          unsubscribe()
+        }
+      }
+    }
+    return undefined
+  }, [])
+
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
     const val = e.target.value
     setInputValue(val)
     setTelegramId(val)
 
-    // Сохраняем телеграм айди в основной процесс (через electronAPI)
     if (window.electronAPI?.saveTelegramId) {
       try {
         await window.electronAPI.saveTelegramId(val)
       } catch (error) {
         console.error('Failed to save Telegram ID', error)
       }
+    }
+  }
+
+  const handleCheckUpdates = (): void => {
+    if (window.electronAPI?.checkForUpdates) {
+      window.electronAPI.checkForUpdates()
+      setUpdateStatus('Проверка обновлений...')
     }
   }
 
@@ -58,6 +81,17 @@ function Header(): React.JSX.Element {
         onChange={handleChange}
         spellCheck={false}
       />
+
+{/* Кнопка проверки обновлений */}
+<button className="update_button" onClick={handleCheckUpdates}>
+Check Update</button>
+
+{/* Статус обновлений в отдельном окошке */}
+{updateStatus && (
+  <div className="update_status_popup">
+    {updateStatus}
+  </div>
+)}
 
       <ul className="icon_links">
         <li>

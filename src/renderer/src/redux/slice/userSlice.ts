@@ -30,14 +30,15 @@ const initialState: UserInfoState = {
   error: null
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string
 // Асинхронный thunk для загрузки данных
 export const fetchUserInfo = createAsyncThunk<
   UserInfoType,
-  string, // telegramId
+  string,
   { rejectValue: string }
 >('userInfo/fetchUserInfo', async (telegramId, thunkAPI) => {
   try {
-    const res = await fetch(`/api/vpn/info/${telegramId}`)
+    const res = await fetch(`${API_BASE_URL}/info/${telegramId}`)
     if (!res.ok) {
       return thunkAPI.rejectWithValue(`Ошибка HTTP: ${res.status} ${res.statusText}`)
     }

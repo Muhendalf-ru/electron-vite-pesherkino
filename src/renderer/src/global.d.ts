@@ -14,6 +14,10 @@ declare global {
       minimize?: () => void
       // maximize?: () => void
       close?: () => void
+
+      // Новые методы для автообновления
+      checkForUpdates: () => void
+      onUpdateMessage: (callback: (msg: string) => void) => () => void
     }
   }
 }
