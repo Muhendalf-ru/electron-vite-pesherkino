@@ -9,10 +9,15 @@ const api = {
   deleteDiscordFiles: () => ipcRenderer.invoke('delete-discord-files'),
   // minimize: () => ipcRenderer.send('window-minimize'),
   // maximize: () => ipcRenderer.send('window-maximize'),
-  close: () => ipcRenderer.send('window-close'),
   checkForUpdates: () => ipcRenderer.send('check-for-updates'),
   onUpdateMessage: (callback: (msg: string) => void) =>
-    ipcRenderer.on('update-message', (_, msg) => callback(msg))
+    ipcRenderer.on('update-message', (_, msg) => callback(msg)),
+
+  minimize: () => ipcRenderer.send('window-minimize'),
+  close: () => ipcRenderer.send('window-close'),
+  // logs
+
+  getLogs: () => ipcRenderer.invoke('get-logs')
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

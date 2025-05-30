@@ -23,6 +23,6 @@ export default defineConfig({
           additionalData: `@use "@/styles/variables" as *;`
         }
       }
-    },
+    }
   }
 })

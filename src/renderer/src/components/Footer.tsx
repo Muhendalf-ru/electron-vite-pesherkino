@@ -3,7 +3,7 @@ import type { JSX } from 'react'
 export const Footer = (): JSX.Element => (
   <footer className="footer">
     <a
-      href="https://github.com/Muhendalf-ru"
+      href="https://github.com/Muhendalf-ru/pesherkino-vpn"
       target="_blank"
       rel="noopener noreferrer"
       title="GitHub"

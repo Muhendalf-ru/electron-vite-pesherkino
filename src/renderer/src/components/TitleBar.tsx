@@ -18,9 +18,6 @@ const TitleBar: React.FC = () => {
         >
           -
         </button>
-        {/* <button type="button" data-app-region="no-drag" onClick={maximize} aria-label="Развернуть">
-          🗖
-        </button> */}
         <button type="button" data-app-region="no-drag" onClick={close} aria-label="Закрыть">
           ×
         </button>

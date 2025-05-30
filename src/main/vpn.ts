@@ -28,10 +28,11 @@ export function saveTelegramId(id: string): void {
   fs.writeFileSync(filePath, id, 'utf-8')
 }
 
-const baseUrl = process.env.VITE_VPN_CONFIG_URL || 'https://sub.pesherkino.store:8443/pesherkino/vpn/config';
+const baseUrl =
+  process.env.VITE_VPN_CONFIG_URL || 'https://sub.pesherkino.store:8443/pesherkino/vpn/config'
 
 export async function fetchConfig(telegramId: string): Promise<Buffer> {
-const url = `${baseUrl}/${telegramId}`;
+  const url = `${baseUrl}/${telegramId}`
   const response = await axios.get(url, { responseType: 'arraybuffer' })
 
   const responseText = response.data.toString()
@@ -89,25 +90,55 @@ export function isSingboxRunning(): Promise<boolean> {
 export function stopSingboxAndDiscord(): Promise<{ success: boolean; error?: string }> {
   return new Promise((resolve) => {
     if (process.platform === 'win32') {
-      exec('taskkill /IM sing-box.exe /F && taskkill /IM Discord.exe /F', (err) => {
-        if (err) {
-          resolve({ success: false, error: err.message })
-        } else {
-          resolve({ success: true })
-        }
-      })
-    } else {
-      exec('pkill -f sing-box && pkill -f discord', (err) => {
-        if (err) {
-          if (err.code === 1) {
-            resolve({ success: true }) // процессы не найдены — считаем остановленными
-          } else {
-            resolve({ success: false, error: err.message })
+      const killProcess = (name: string) =>
+        new Promise<{ ok: boolean; error?: string }>((res) => {
+          exec(`taskkill /IM ${name} /F`, (err, stderr) => {
+            if (err) {
+              const isNotFound =
+                stderr.toLowerCase().includes('не удалось найти') ||
+                stderr.toLowerCase().includes('not found') ||
+                stderr.toLowerCase().includes('no instance')
+              return res({ ok: isNotFound, error: isNotFound ? undefined : stderr.trim() })
+            }
+            res({ ok: true })
+          })
+        })
+
+      Promise.all([killProcess('sing-box.exe'), killProcess('Discord.exe')]).then(
+        ([singboxResult, discordResult]) => {
+          if (!singboxResult.ok || !discordResult.ok) {
+            const combinedError = [singboxResult.error, discordResult.error]
+              .filter(Boolean)
+              .join('; ')
+            return resolve({ success: false, error: combinedError })
           }
-        } else {
           resolve({ success: true })
         }
-      })
+      )
+    } else {
+      // Linux/macOS
+      const killUnix = (cmd: string) =>
+        new Promise<{ ok: boolean; error?: string }>((res) => {
+          exec(cmd, (err, stderr) => {
+            if (err) {
+              const isNotFound = stderr.toLowerCase().includes('no process found')
+              return res({ ok: isNotFound, error: isNotFound ? undefined : stderr.trim() })
+            }
+            res({ ok: true })
+          })
+        })
+
+      Promise.all([killUnix('pkill -f sing-box'), killUnix('pkill -f discord')]).then(
+        ([singboxResult, discordResult]) => {
+          if (!singboxResult.ok || !discordResult.ok) {
+            const combinedError = [singboxResult.error, discordResult.error]
+              .filter(Boolean)
+              .join('; ')
+            return resolve({ success: false, error: combinedError })
+          }
+          resolve({ success: true })
+        }
+      )
     }
   })
 }

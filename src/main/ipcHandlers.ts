@@ -79,10 +79,10 @@ ipcMain.handle('save-telegram-id', async (_event, telegramId: string) => {
   }
 })
 
-// ipcMain.on('window-minimize', (event) => {
-//   const win = BrowserWindow.fromWebContents(event.sender)
-//   if (win) win.minimize()
-// })
+ipcMain.on('window-minimize', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  if (win) win.minimize()
+})
 
 ipcMain.on('window-maximize', (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
@@ -96,5 +96,9 @@ ipcMain.on('window-maximize', (event) => {
 
 ipcMain.on('window-close', (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
-  if (win) win.close()
+  if (win) {
+    // Прячем в трей вместо закрытия
+    win.hide()
+    event.preventDefault()
+  }
 })

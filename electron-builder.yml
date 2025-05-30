@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: pesherkino-vpn
+appId: vpn.pesherkino-vpn
+productName: Pesherkino VPN
 directories:
   buildResources: build
 files:

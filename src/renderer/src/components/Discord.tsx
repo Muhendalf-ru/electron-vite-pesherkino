@@ -1,92 +1,99 @@
-import { useTelegram } from '@renderer/hooks/useTelegram'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { DiscordVpnWarningTab } from './DiscordWariningTab'
+import {
+  setVpnRunning,
+  setTelegramId,
+  setStatus,
+  setIsError
+} from '@renderer/redux/slice/discordSlice'
+import { RootState } from '@renderer/redux/store'
 
 function Discord(): React.JSX.Element {
-  const { telegramId, setTelegramId } = useTelegram()
+  const dispatch = useDispatch()
+  const { telegramId, vpnRunning, status, isError } = useSelector(
+    (state: RootState) => state.discord
+  )
 
-  const [status, setStatus] = useState<string | null>(null)
-  const [isError, setIsError] = useState(false)
-  const [vpnRunning, setVpnRunning] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [showWarning, setShowWarning] = useState(false) // для показа/скрытия таба
+  const [showWarning, setShowWarning] = useState(false)
 
   useEffect(() => {
     const check = async (): Promise<void> => {
       const running = await window.electronAPI.checkVpnStatus()
-      setVpnRunning(running)
+      dispatch(setVpnRunning(running))
 
       const savedId = await window.electronAPI.getTelegramId()
       if (savedId) {
-        setTelegramId(savedId)
+        dispatch(setTelegramId(savedId))
       } else {
-        setStatus('Error: Telegram ID not found. Please set it first.')
-        setIsError(true)
+        dispatch(setStatus('Error: Telegram ID not found. Please set it first.'))
+        dispatch(setIsError(true))
       }
     }
     check()
-  }, [setTelegramId])
+  }, [dispatch])
 
   const handleRunVpnSetup = async (): Promise<void> => {
-    setStatus('Running...')
-    setIsError(false)
+    dispatch(setStatus('Running...'))
+    dispatch(setIsError(false))
 
     if (!telegramId || telegramId.trim() === '') {
-      setStatus('Error: Telegram ID is missing. Cannot run VPN setup.')
-      setIsError(true)
+      dispatch(setStatus('Error: Telegram ID is missing. Cannot run VPN setup.'))
+      dispatch(setIsError(true))
       return
     }
 
     try {
       const res = await window.electronAPI.runVpnSetup(telegramId.trim())
       if (res.success) {
-        setStatus('VPN setup completed successfully!')
-        setVpnRunning(true)
+        dispatch(setStatus('VPN setup completed successfully!'))
+        dispatch(setVpnRunning(true))
       } else {
-        setStatus(`Error: ${res.error}`)
-        setIsError(true)
+        dispatch(setStatus(`Error: ${res.error}`))
+        dispatch(setIsError(true))
       }
     } catch (err) {
-      setStatus(`Unexpected error: ${String(err)}`)
-      setIsError(true)
+      dispatch(setStatus(`Unexpected error: ${String(err)}`))
+      dispatch(setIsError(true))
     }
   }
 
   const handleDeleteDiscordFiles = async (): Promise<void> => {
-    setStatus('Deleting Discord files...')
-    setIsError(false)
+    dispatch(setStatus('Deleting Discord files...'))
+    dispatch(setIsError(false))
     setIsDeleting(true)
     try {
       const res = await window.electronAPI.deleteDiscordFiles()
       if (res.success) {
-        setStatus('Discord files successfully deleted.')
+        dispatch(setStatus('Discord files successfully deleted.'))
       } else {
-        setStatus(`Error during deletion: ${res.error}`)
-        setIsError(true)
+        dispatch(setStatus(`Error during deletion: ${res.error}`))
+        dispatch(setIsError(true))
       }
     } catch (err) {
-      setStatus(`Unexpected error: ${String(err)}`)
-      setIsError(true)
+      dispatch(setStatus(`Unexpected error: ${String(err)}`))
+      dispatch(setIsError(true))
     } finally {
       setIsDeleting(false)
     }
   }
 
   const handleStopVpn = async (): Promise<void> => {
-    setStatus('Stopping VPN...')
-    setIsError(false)
+    dispatch(setStatus('Stopping VPN...'))
+    dispatch(setIsError(false))
     try {
       const res = await window.electronAPI.stopVpn()
       if (res.success) {
-        setStatus('VPN stopped successfully.')
-        setVpnRunning(false)
+        dispatch(setStatus('VPN stopped successfully.'))
+        dispatch(setVpnRunning(false))
       } else {
-        setStatus(`Error: ${res.error}`)
-        setIsError(true)
+        dispatch(setStatus(`Error: ${res.error}`))
+        dispatch(setIsError(true))
       }
     } catch (err) {
-      setStatus(`Unexpected error: ${String(err)}`)
-      setIsError(true)
+      dispatch(setStatus(`Unexpected error: ${String(err)}`))
+      dispatch(setIsError(true))
     }
   }
 
@@ -99,7 +106,6 @@ function Discord(): React.JSX.Element {
       <div className={`discord-container ${vpnRunning ? 'vpn-on' : 'vpn-off'}`}>
         <h1 className="discord-title">
           Discord Proxy
-          {/* Иконка подсказки */}
           <button
             className="discord-help-icon"
             onClick={toggleWarning}
@@ -111,7 +117,6 @@ function Discord(): React.JSX.Element {
           </button>
         </h1>
 
-        {/* Кнопки управления */}
         <button
           onClick={handleRunVpnSetup}
           className="discord-button"
@@ -141,20 +146,11 @@ function Discord(): React.JSX.Element {
         )}
       </div>
 
-      {/* Вкладка предупреждения, видна только если showWarning=true */}
       {showWarning && (
         <div className="discord-overlay" onClick={() => setShowWarning(false)}>
-          <div
-            className="discord-warning-modal"
-            onClick={(e) => e.stopPropagation()} // чтобы клик по модалке не закрывал её
-          >
+          <div className="discord-warning-modal" onClick={(e) => e.stopPropagation()}>
             <DiscordVpnWarningTab />
-            {/* Добавим кнопку закрытия */}
-            <button
-              className="discord-warnng-button"
-              onClick={() => setShowWarning(false)}
-              aria-label="Закрыть предупреждение"
-            >
+            <button className="discord-warnng-button" onClick={() => setShowWarning(false)}>
               ×
             </button>
           </div>

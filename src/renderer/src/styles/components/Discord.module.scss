@@ -161,15 +161,15 @@
   color: #eee;
   font-size: 1.5rem;
   cursor: pointer;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
-    color: #62a0ff;  // светло-голубой при наведении
+    color: #62a0ff; // светло-голубой при наведении
   }
 
   &:active {
-    transform: scale(0.85);  // чуть уменьшается при нажатии
+    transform: scale(0.85); // чуть уменьшается при нажатии
   }
-
 }
-

@@ -1,0 +1,119 @@
+$font-size-base: 16px;
+$font-size-small: 0.9em;
+$font-size-medium: 1.2em;
+$font-size-large: 1.4em;
+
+$color-light: #dcdcdc;
+$color-dark: #181818;
+$color-primary: #007bff;
+$color-primary-dark: #0056b3;
+$color-primary-darker: #004080;
+$color-warning: #f7ca71;
+$color-error: #ff6e6e;
+$color-info: #6ec1ff;
+$color-muted: #888;
+$color-light-text: #999;
+$border-color: #333;
+
+$log-container-height: 400px; // Максимальная высота для контейнера логов
+
+.logs-viewer {
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+
+  .logs-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .logs-title {
+    margin: 0;
+    flex: 1;
+    font-size: $font-size-medium;
+    color: $color-light;
+  }
+
+  .logs-button {
+    padding: 6px 12px;
+    margin-right: 8px;
+    background-color: #4b79e6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: $font-size-small;
+
+    &:hover {
+      background-color: #3a5fcc;
+    }
+
+    &:active {
+      background-color: $color-primary-darker;
+    }
+  }
+
+  .log-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $color-light-text;
+    font-size: $font-size-base;
+    display: none;
+
+    /* Показываем, если загрузка активна */
+    &.active {
+      display: block;
+    }
+  }
+
+  .error-message {
+    color: $color-error;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .log-container {
+    background: $color-dark;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    overflow-y: auto;
+    padding: 12px;
+    margin-top: 4px;
+    max-height: $log-container-height;
+    position: relative;
+
+    /* Flexbox для внутреннего выравнивания */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 160px;
+  }
+
+  .log-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: $font-size-small;
+    padding: 2px 0;
+    color: $color-light; // Default text color
+
+    &.info {
+      color: $color-info;
+    }
+
+    &.warn {
+      color: $color-warning;
+    }
+
+    &.error {
+      color: $color-error;
+    }
+
+    &.empty {
+      color: $color-muted;
+      font-style: italic;
+    }
+  }
+}

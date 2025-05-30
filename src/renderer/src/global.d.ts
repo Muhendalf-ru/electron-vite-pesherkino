@@ -18,6 +18,10 @@ declare global {
       // Новые методы для автообновления
       checkForUpdates: () => void
       onUpdateMessage: (callback: (msg: string) => void) => () => void
+
+      // логи
+
+      getLogs: () => Promise<string> // Возвращаем логи как строку
     }
   }
 }

@@ -7,6 +7,7 @@ import { useLocation, Link } from 'react-router-dom'
 function Header(): React.JSX.Element {
   const location = useLocation()
   const isDiscord = location.pathname === '/discord-fix'
+  const isLogs = location.pathname === '/logs'
 
   const { telegramId, setTelegramId } = useTelegram()
   const [inputValue, setInputValue] = useState('')
@@ -71,6 +72,11 @@ function Header(): React.JSX.Element {
             Discord Fix
           </Link>
         </li>
+        <li>
+          <Link to="/logs" className={isLogs ? 'active' : ''}>
+            Logs
+          </Link>
+        </li>
       </ul>
 
       <input
@@ -82,16 +88,13 @@ function Header(): React.JSX.Element {
         spellCheck={false}
       />
 
-{/* Кнопка проверки обновлений */}
-<button className="update_button" onClick={handleCheckUpdates}>
-Check Update</button>
+      {/* Кнопка проверки обновлений */}
+      <button className="update_button" onClick={handleCheckUpdates}>
+        Check Update
+      </button>
 
-{/* Статус обновлений в отдельном окошке */}
-{updateStatus && (
-  <div className="update_status_popup">
-    {updateStatus}
-  </div>
-)}
+      {/* Статус обновлений в отдельном окошке */}
+      {updateStatus && <div className="update_status_popup">{updateStatus}</div>}
 
       <ul className="icon_links">
         <li>
