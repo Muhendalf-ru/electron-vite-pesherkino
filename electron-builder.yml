@@ -11,6 +11,7 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   - '!resources/config.json'
   - '!resources/telegram_id.txt'
+afterPack: ./remove-extra-locales.js
 asarUnpack:
   - resources/**
 win:

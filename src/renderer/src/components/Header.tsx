@@ -8,6 +8,7 @@ function Header(): React.JSX.Element {
   const location = useLocation()
   const isDiscord = location.pathname === '/discord-fix'
   const isLogs = location.pathname === '/logs'
+  const isSettings = location.pathname === '/settings'
 
   const { telegramId, setTelegramId } = useTelegram()
   const [inputValue, setInputValue] = useState('')
@@ -75,6 +76,11 @@ function Header(): React.JSX.Element {
         <li>
           <Link to="/logs" className={isLogs ? 'active' : ''}>
             Logs
+          </Link>
+        </li>
+        <li>
+          <Link to="/settings" className={isSettings ? 'active' : ''}>
+            Settings
           </Link>
         </li>
       </ul>

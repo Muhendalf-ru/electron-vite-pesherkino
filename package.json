@@ -1,9 +1,9 @@
 {
   "name": "pesherkino-vpn",
-  "version": "2.0.24",
+  "version": "2.0.26",
   "description": "Pesherkino VPN",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "Muhendalf",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
@@ -27,6 +27,9 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.9.0",
+    "discord-rich-presence": "^0.0.8",
+    "discord-rpc": "^4.0.1",
+    "electron-packager-languages": "^0.6.0",
     "electron-updater": "^6.3.9",
     "express": "^5.1.0",
     "react-redux": "^9.2.0",

@@ -18,12 +18,19 @@ ipcMain.handle('get-telegram-id', async () => {
   return getTelegramId()
 })
 
+ipcMain.handle('check-vpn-status', async () => {
+  return isSingboxRunning()
+})
+
 ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
   try {
     const telegramId = telegramIdFromUI || getTelegramId()
     if (!telegramId) {
       throw new Error('Telegram ID not provided')
     }
+
+    // 🛑 Останавливаем Discord и Sing-box, если уже запущены
+    await stopSingboxAndDiscord()
 
     const configData = await fetchConfig(telegramId)
 
@@ -32,12 +39,11 @@ ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
     fs.writeFileSync(configPath, configData)
 
     checkRequiredFiles()
-
-    const discordPath = getLatestDiscordAppPath()
     copyPatchFiles(singboxPath)
 
     runSingbox(configPath)
 
+    const discordPath = getLatestDiscordAppPath()
     const discordExe = path.join(discordPath, 'Discord.exe')
     if (!fs.existsSync(discordExe)) throw new Error('Discord.exe not found')
 
@@ -58,8 +64,8 @@ function spawnDiscord(discordExe: string, discordPath: string): void {
   }).unref()
 }
 
-ipcMain.handle('check-vpn-status', async () => {
-  return isSingboxRunning()
+ipcMain.handle('update-discord-status', async () => {
+  isSingboxRunning()
 })
 
 ipcMain.handle('stop-vpn', async () => {

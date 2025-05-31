@@ -34,6 +34,16 @@ function Discord(): React.JSX.Element {
     check()
   }, [dispatch])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.electronAPI.checkVpnStatus().then((running) => {
+        dispatch(setVpnRunning(running))
+      })
+    }, 5000) // каждые 5 секунд
+
+    return () => clearInterval(interval)
+  }, [dispatch])
+
   const handleRunVpnSetup = async (): Promise<void> => {
     dispatch(setStatus('Running...'))
     dispatch(setIsError(false))
@@ -52,6 +62,8 @@ function Discord(): React.JSX.Element {
       } else {
         dispatch(setStatus(`Error: ${res.error}`))
         dispatch(setIsError(true))
+
+        await window.electronAPI.updateDiscordStatus()
       }
     } catch (err) {
       dispatch(setStatus(`Unexpected error: ${String(err)}`))
@@ -87,6 +99,8 @@ function Discord(): React.JSX.Element {
       if (res.success) {
         dispatch(setStatus('VPN stopped successfully.'))
         dispatch(setVpnRunning(false))
+
+        await window.electronAPI.updateDiscordStatus()
       } else {
         dispatch(setStatus(`Error: ${res.error}`))
         dispatch(setIsError(true))

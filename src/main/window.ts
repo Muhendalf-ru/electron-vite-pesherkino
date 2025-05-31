@@ -2,6 +2,8 @@ import { BrowserWindow, shell } from 'electron'
 import path, { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
+const iconPath = path.join(__dirname, '../../resources/icon.ico')
+
 export function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
     width: 950,
@@ -11,9 +13,7 @@ export function createWindow(): BrowserWindow {
     show: true,
     title: 'Pesherkino VPN',
     frame: false,
-    ...(process.platform === 'linux'
-      ? { icon: path.join(__dirname, '../../resources/icon.png') }
-      : {}),
+    icon: process.platform === 'win32' || process.platform === 'linux' ? iconPath : undefined,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,

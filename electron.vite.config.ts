@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
+import packageJson from './package.json'
 
 export default defineConfig({
   main: {
@@ -15,6 +16,9 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src'),
         '@': resolve('src/renderer/src') // для корректного @import '@/styles/variables.scss'
       }
+    },
+    define: {
+      'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version)
     },
     plugins: [react()],
     css: {
