@@ -34,12 +34,19 @@ declare global {
 
       onVpnStatusChanged: (callback: (running: boolean) => void) => () => void
       getVpnStatus: () => Promise<boolean>
+      getPing: () => Promise<number | null>
+      invoke: <T = any>(channel: string, ...args: any[]) => Promise<T>
+
+      openFolder: (folderPath: string) => void
 
       onDiscordRpcStatusChanged: (callback: (value: any) => void) => void
       getDiscordRpcEnabled: () => Promise<boolean>
       setDiscordRpcEnabled: (enabled: boolean) => Promise<void>
       onDiscordRpcStatusChanged?: (callback: (enabled: boolean) => void) => void
 
+      checkConfigExists: (filename: string) => Promise<boolean>
+
+      getProxyConnections: () => Promise<any>
       // Дополнительно — для статуса sing-box (VPN)
       getSingBoxStatus: () => Promise<boolean>
       onSingBoxStatusChanged?: (callback: (connected: boolean) => void) => void

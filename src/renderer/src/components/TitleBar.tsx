@@ -1,4 +1,5 @@
 import React from 'react'
+import PingDisplay from './PingDisplay'
 
 const TitleBar: React.FC = () => {
   // Функции для управления окном через preload API
@@ -9,6 +10,7 @@ const TitleBar: React.FC = () => {
   return (
     <div className="custom-titlebar" data-app-region="drag">
       <div className="custom-titlebar-title">Pesherkino VPN</div>
+      <PingDisplay />
       <div className="custom-titlebar-buttons">
         <button
           type="button"

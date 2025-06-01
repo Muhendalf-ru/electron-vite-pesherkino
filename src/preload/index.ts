@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
+import { contextBridge, ipcRenderer, shell, type IpcRendererEvent } from 'electron'
 
 const api = {
   runVpnSetup: (telegramId?: string) => ipcRenderer.invoke('run-vpn-setup', telegramId),
@@ -21,15 +21,8 @@ const api = {
 
   updateDiscordStatus: () => ipcRenderer.invoke('update-discord-status'),
 
-  // // Discord status
-
-  // getDiscordRpcEnabled: () => ipcRenderer.invoke('get-discord-rpc-enabled'),
-  // setDiscordRpcEnabled: (enabled) => ipcRenderer.invoke('set-discord-rpc-enabled', enabled),
-
-  // onDiscordRpcStatusChanged: (callback) => ipcRenderer.on('discord-rpc-status-changed', (_, value) => callback(value)),
-
-  // startVpnWatcher: () => ipcRenderer.invoke('start-vpn-watcher'),
-  // stopVpnWatcher: () => ipcRenderer.invoke('stop-vpn-watcher'),
+  invoke: (channel: string, ...args: any[]) => ipcRenderer.invoke(channel, ...args),
+  getPing: () => ipcRenderer.invoke('get-ping'),
   getDiscordRpcEnabled: () => ipcRenderer.invoke('get-discord-rpc-enabled'),
   setDiscordRpcEnabled: (enabled: boolean) =>
     ipcRenderer.invoke('set-discord-rpc-enabled', enabled),
@@ -43,6 +36,15 @@ const api = {
     }
   },
 
+  checkConfigExists: (filename: string) => ipcRenderer.invoke('check-config-exists', filename),
+
+  openFolder: (folderPath) => {
+    shell.openPath(folderPath).catch((err) => {
+      console.error('Ошибка при открытии папки:', err)
+    })
+  },
+
+  getProxyConnections: () => ipcRenderer.invoke('get-proxy-connections'),
   // VPN статус
   getVpnStatus: () => ipcRenderer.invoke('get-vpn-status'),
   onVpnStatusChanged: (callback: (running: boolean) => void) => {

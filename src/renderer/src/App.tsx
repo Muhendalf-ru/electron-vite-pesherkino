@@ -6,7 +6,7 @@ import { TelegramProvider } from './context/TelegramProvider'
 import TitleBar from './components/TitleBar'
 import { Footer } from './components/Footer'
 import LogsViewer from './components/LogsViewer'
-import DiscordRpcToggle from './components/Settings'
+import Settings from './components/Settings'
 
 function App(): React.ReactElement {
   return (
@@ -18,21 +18,7 @@ function App(): React.ReactElement {
           <Route path="/" element={<Main />} />
           <Route path="/discord-fix" element={<Discord />} />
           <Route path="/logs" element={<LogsViewer />} />
-          <Route
-            path="/settings"
-            element={
-              <DiscordRpcToggle
-                onToggle={(enabled) => {
-                  console.log('Discord RPC включён:', enabled)
-                  if (enabled) {
-                    window.electronAPI.startVpnWatcher()
-                  } else {
-                    window.electronAPI.stopVpnWatcher()
-                  }
-                }}
-              />
-            }
-          />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </HashRouter>
       <Footer />

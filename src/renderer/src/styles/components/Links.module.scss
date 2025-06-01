@@ -188,4 +188,32 @@
       }
     }
   }
+
+  .download-config-btn {
+    background-color: transparent;
+    border: 1.5px solid #4da3ff;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.95rem;
+    color: #4da3ff;
+    cursor: pointer;
+    font-weight: 600;
+    -webkit-user-select: none;
+    user-select: none;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+
+    &:hover {
+      background-color: #4da3ff;
+      color: #1c1d22;
+      border-color: #4da3ff;
+    }
+
+    &:active {
+      background-color: #3a7be0;
+      border-color: #3a7be0;
+    }
+  }
 }

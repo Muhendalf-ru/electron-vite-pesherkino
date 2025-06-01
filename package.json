@@ -1,6 +1,6 @@
 {
   "name": "pesherkino-vpn",
-  "version": "2.0.26",
+  "version": "2.0.27",
   "description": "Pesherkino VPN",
   "main": "./out/main/index.js",
   "author": "Muhendalf",
@@ -34,6 +34,7 @@
     "express": "^5.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
+    "socks-proxy-agent": "^8.0.5",
     "winreg": "^1.2.5"
   },
   "devDependencies": {

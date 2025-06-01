@@ -1,7 +1,6 @@
 import path from 'path'
 import fs from 'fs'
 import { spawn, exec } from 'child_process'
-import axios from 'axios'
 import { app } from 'electron'
 import { clearActivity, setActivity, stopDiscordRPC } from './DiscordRpc/discordPresence'
 
@@ -60,25 +59,6 @@ export function saveTelegramId(id: string): void {
   const config = loadConfig()
   config.telegramId = id
   saveConfig(config)
-}
-
-const baseUrl =
-  process.env.VITE_VPN_CONFIG_URL || 'https://sub.pesherkino.store:8443/pesherkino/vpn/config'
-
-export async function fetchConfig(telegramId: string): Promise<Buffer> {
-  const url = `${baseUrl}/${telegramId}`
-  const response = await axios.get(url, { responseType: 'arraybuffer' })
-
-  try {
-    const jsonTest = JSON.parse(response.data.toString())
-    if (jsonTest?.message === 'Пользователь не найден или нет ссылок') {
-      throw new Error('Пользователь не найден')
-    }
-  } catch {
-    // если не JSON — ок, это бинарный конфиг
-  }
-
-  return response.data
 }
 
 export function checkRequiredFiles(): void {

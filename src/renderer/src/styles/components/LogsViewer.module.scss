@@ -90,6 +90,13 @@ $log-container-height: 400px; // Максимальная высота для к
     flex-direction: column;
     justify-content: flex-end;
     margin-bottom: 160px;
+
+    hr {
+      border: none; // убираем стандартную рамку
+      border-top: 1px solid #444; // тонкая серая линия
+      margin: 8px 0; // отступы сверху и снизу
+      width: 100%; // на всю ширину контейнера
+    }
   }
 
   .log-line {
@@ -115,5 +122,95 @@ $log-container-height: 400px; // Максимальная высота для к
       color: $color-muted;
       font-style: italic;
     }
+  }
+
+  .log-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: $font-size-small;
+    padding: 2px 0;
+    color: $color-light; // Default text color
+
+    &.info {
+      color: $color-info;
+    }
+  }
+
+  .log-info {
+    display: flex;
+    gap: 13px;
+    font-weight: 600;
+    color: #eee;
+  }
+
+  .log-info,
+  .connection-line {
+    display: flex;
+    justify-content: center;
+    font-family: monospace;
+    font-weight: 600;
+    color: #eee;
+    padding: 2px 5px;
+    align-items: center;
+  }
+
+  .col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col.pid {
+    flex-basis: 9%;
+    text-align: right;
+    color: $color-info;
+    padding-right: 40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .col.process {
+    flex-basis: 15%;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+  }
+
+  .col.proto {
+    flex-basis: 10%;
+    // text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+  }
+
+  .col.local {
+    flex-basis: 18%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .col.foreign {
+    flex-basis: 18%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .col.state {
+    flex-basis: 12%;
+    // padding-left: 15px;
+    text-align: center;
+    font-weight: 600;
+    color: #aaf;
+    display: flex;
+    justify-content: center;
+  }
+
+  .connection-line .col {
+    padding-left: 10px; // отступ справа, чтобы граница не прилегала к тексту
+    border-right: 1px solid #444; // вертикальная линия (тонкая серая)
+  }
+
+  .connection-line .col:last-child {
+    border-right: none; // у последней колонки линии не будет
   }
 }

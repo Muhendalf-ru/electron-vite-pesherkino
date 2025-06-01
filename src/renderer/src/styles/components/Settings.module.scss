@@ -89,8 +89,47 @@
   }
 }
 
+.buttons-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 1rem; // расстояние между кнопками
+  justify-content: flex-start;
+  max-width: 400px;
+  padding-bottom: 400px;
+
+  button {
+    background-color: #2c2f48;
+    color: #e0e0e0;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+
+    &:hover {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    &:active {
+      background-color: #3a8b3a;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+    }
+  }
+}
+
 .app {
-  padding-bottom: 500px;
+  // padding-bottom: 160px;
   display: flex;
   justify-content: center;
 }

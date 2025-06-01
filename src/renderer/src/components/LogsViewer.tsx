@@ -2,6 +2,7 @@ import { setLoading, setError, appendLogs, clearLogs } from '@renderer/redux/sli
 import { AppDispatch, RootState } from '@renderer/redux/store'
 import React, { useRef, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ProxyConnections from './ProxyConnectLogs'
 
 const LogsViewer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -65,6 +66,8 @@ const LogsViewer: React.FC = () => {
       <div className="log-container" ref={logContainerRef}>
         {formattedLogs}
       </div>
+
+      <ProxyConnections />
     </div>
   )
 }
