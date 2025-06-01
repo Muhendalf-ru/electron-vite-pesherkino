@@ -19,13 +19,10 @@
 ### ⬇️ Загрузка последнего установщика
 
 1. Перейдите на страницу [Pesherkino VPN releases](https://github.com/Muhendalf-ru/electron-vite-pesherkino/releases).
-2. Скачайте три файла релиза:
-   - `latest.yml`
-   - `pesherkino-vpn-2.0.x-setup.exe`
-   - `pesherkino-vpn-2.0.x-setup.exe.blockmap`
-3. Переместите все три файла в одну папку.
-4. Запустите `pesherkino-vpn-2.0.x-setup.exe` для установки приложения.
-5. ⚠️ **Важно:** мы используем систему автообновления, установите строго по инструкции!
+2. Скачайте файл релиза:
+   - `pesherkino-vpn-2.0.хх-setup.exe`
+3. Запустите `pesherkino-vpn-2.0.x-setup.exe` для установки приложения.
+4. ⚠️ **Важно:** мы используем систему автообновления, установите строго по инструкции!
 
 ---
 
