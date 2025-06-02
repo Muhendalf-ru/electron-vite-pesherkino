@@ -1,5 +1,14 @@
+import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
+
+export function spawnDiscord(discordExe: string, discordPath: string): void {
+  spawn(discordExe, [], {
+    detached: true,
+    stdio: 'ignore',
+    cwd: discordPath
+  }).unref()
+}
 
 export function getDiscordBasePath(): string {
   return path.join(process.env.LOCALAPPDATA || '', 'Discord')

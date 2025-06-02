@@ -12,6 +12,7 @@
   font-size: 14px;
   font-weight: 500;
   -webkit-user-select: none;
+  user-select: none;
   -webkit-app-region: drag;
 
   div:first-child {
@@ -33,7 +34,7 @@
       font-size: 16px;
       color: #eee;
       cursor: pointer;
-      -webkit-app-region: no-drag; // чтобы кнопки кликабельными были
+      -webkit-app-region: no-drag;
 
       &:hover {
         background-color: #3a3a3a;

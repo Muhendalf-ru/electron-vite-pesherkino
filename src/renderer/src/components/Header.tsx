@@ -12,7 +12,7 @@ function Header(): React.JSX.Element {
 
   const { telegramId, setTelegramId } = useTelegram()
   const [inputValue, setInputValue] = useState('')
-  const [updateStatus, setUpdateStatus] = useState('') // статус автообновлений
+  const [updateStatus, setUpdateStatus] = useState('')
 
   useEffect(() => {
     if (telegramId) {
@@ -21,13 +21,11 @@ function Header(): React.JSX.Element {
   }, [telegramId])
 
   useEffect(() => {
-    // Подписка на сообщения от main процесса об обновлениях
     if (window.electronAPI?.onUpdateMessage) {
       const handler = (msg: string): void => {
         setUpdateStatus(msg)
       }
       const unsubscribe = window.electronAPI.onUpdateMessage(handler)
-      // Очистка подписки при размонтировании
       return () => {
         if (typeof unsubscribe === 'function') {
           unsubscribe()
@@ -94,12 +92,10 @@ function Header(): React.JSX.Element {
         spellCheck={false}
       />
 
-      {/* Кнопка проверки обновлений */}
       <button className="update_button" onClick={handleCheckUpdates}>
         Check Update
       </button>
 
-      {/* Статус обновлений в отдельном окошке */}
       {updateStatus && <div className="update_status_popup">{updateStatus}</div>}
 
       <ul className="icon_links">

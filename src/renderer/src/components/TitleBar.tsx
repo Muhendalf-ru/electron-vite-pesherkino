@@ -2,9 +2,7 @@ import React from 'react'
 import PingDisplay from './PingDisplay'
 
 const TitleBar: React.FC = () => {
-  // Функции для управления окном через preload API
   const minimize = (): void => window.electronAPI.minimize?.()
-  // const maximize = (): void => window.electronAPI.maximize?.()
   const close = (): void => window.electronAPI.close?.()
 
   return (

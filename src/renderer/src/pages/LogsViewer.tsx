@@ -2,7 +2,7 @@ import { setLoading, setError, appendLogs, clearLogs } from '@renderer/redux/sli
 import { AppDispatch, RootState } from '@renderer/redux/store'
 import React, { useRef, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ProxyConnections from './ProxyConnectLogs'
+import ProxyConnections from '../components/ProxyConnectLogs'
 
 const LogsViewer: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>()

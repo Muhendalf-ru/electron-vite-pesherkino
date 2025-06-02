@@ -20,7 +20,6 @@ export const TelegramProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const setTelegramId = async (id: string): Promise<void> => {
     setTelegramIdState(id)
-    // Removed call to non-existent saveTelegramId
   }
 
   return (

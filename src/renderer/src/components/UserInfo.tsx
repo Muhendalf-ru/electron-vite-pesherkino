@@ -112,18 +112,14 @@ const UserInfo: React.FC = () => {
 
   const saveConfigToFile = useCallback(async (link: string, location: string) => {
     const config = generateConfigFromLink(link)
-
-    // Вставляем ссылку прямо сюда
     const configWithLink = {
       ...config,
       currentLink: link
     }
-
     const content = JSON.stringify(configWithLink, null, 2)
     const filename = 'config.json'
 
     try {
-      // Передаем link третьим параметром
       const result = await electronAPI.invoke('save-config-file', filename, content, link)
       if (result.success) {
         new Notification('Успешно', {

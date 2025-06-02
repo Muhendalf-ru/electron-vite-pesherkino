@@ -48,7 +48,6 @@ export async function initDiscordRPC(): Promise<void> {
     console.error('[RPC] Login error:', err)
     isReady = false
     rpc = null
-    // <<< ДОБАВЬТЕ ЭТО ДЛЯ ПОВТОРНОЙ ПОПЫТКИ >>>
     if (!reconnectTimeout) {
       reconnectTimeout = setTimeout(() => {
         reconnectTimeout = null

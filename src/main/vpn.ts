@@ -36,10 +36,9 @@ function loadConfig(): Record<string, any> {
     }
   }
 
-  // 🆕 Устанавливаем discordRpcEnabled по умолчанию, если не задан
   if (typeof config.discordRpcEnabled === 'undefined') {
     config.discordRpcEnabled = true
-    saveConfig(config) // сохраняем обратно с новым значением
+    saveConfig(config)
   }
 
   return config
@@ -87,7 +86,6 @@ export function runSingbox(configPath: string, singboxPath: string): void {
     cwd: singboxPath,
     detached: true,
     stdio: 'inherit'
- // Вернуть на 'inherit' при отладке
   })
 
   child.unref()
@@ -183,19 +181,12 @@ const vpnEmitter = new EventEmitter()
 let lastVpnStatus: boolean | null = null
 let watcherInterval: NodeJS.Timeout | null = null
 
-/**
- * Запускает периодическую проверку статуса sing-box (VPN).
- * При смене статуса эмитит событие 'change', а также обновляет Discord RPC через setActivity.
- */
 export async function startVpnStatusWatcher(intervalMs = 1000): Promise<void> {
   if (watcherInterval) return
-
-  // Сбросить lastVpnStatus, чтобы статус всегда обновился при старте вотчера
   lastVpnStatus = null
 
   const checkOnce = async () => {
     const running = await isSingboxRunning()
-    // Всегда обновляем Discord RPC при первом запуске вотчера
     if (lastVpnStatus === null) {
       lastVpnStatus = running
       if (getDiscordRpcEnabled()) {
@@ -207,7 +198,6 @@ export async function startVpnStatusWatcher(intervalMs = 1000): Promise<void> {
       }
       return
     }
-    // Далее — только при изменении статуса
     if (lastVpnStatus !== running) {
       lastVpnStatus = running
       if (getDiscordRpcEnabled()) {
@@ -239,9 +229,6 @@ export async function stopVpnStatusWatcher(): Promise<void> {
   }
 }
 
-/**
- * Подписаться на изменения статуса VPN: callback получит boolean (true=on, false=off)
- */
 export function onVpnStatusChanged(callback: (running: boolean) => void): void {
   vpnEmitter.on('change', callback)
 }

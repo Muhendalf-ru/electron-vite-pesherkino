@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { DiscordVpnWarningTab } from './DiscordWariningTab'
+import { DiscordVpnWarningTab } from '../components/DiscordWariningTab'
 import {
   setVpnRunning,
   setTelegramId,

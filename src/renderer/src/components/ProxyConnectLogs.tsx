@@ -13,7 +13,7 @@ const ProxyConnections: React.FC = () => {
   const [connections, setConnections] = useState<Connection[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const isInitialLoad = useRef(true) // только при первом рендере
+  const isInitialLoad = useRef(true)
 
   const fetchConnections = async (showLoading = false) => {
     if (showLoading) setLoading(true)
@@ -30,11 +30,11 @@ const ProxyConnections: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchConnections(true) // первая загрузка
+    fetchConnections(true)
     isInitialLoad.current = false
 
     const interval = setInterval(() => {
-      fetchConnections(false) // автообновление без спиннера
+      fetchConnections(false)
     }, 5000)
 
     return () => clearInterval(interval)
@@ -56,7 +56,7 @@ const ProxyConnections: React.FC = () => {
       <div className="log-container">
         <div className="log-info">
           <span className="col pid">PID</span>
-          <span className="col process">Процесс</span> {/* вот тут должен быть .process */}
+          <span className="col process">Процесс</span>
           <span className="col proto">Протокол</span>
           <span className="col local">Локальный адрес</span>
           <span className="col foreign">Внешний адрес</span>

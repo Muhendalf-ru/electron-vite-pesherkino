@@ -22,7 +22,6 @@ export function createWindow(): BrowserWindow {
     }
   })
 
-  // Условная загрузка по окружению
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     win.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {

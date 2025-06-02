@@ -1,6 +1,6 @@
 import React from 'react'
-import DiscordRpcToggle from './DiscordRPC'
-import OpenFolders from './OpenFolders'
+import DiscordRpcToggle from '../components/DiscordRPC'
+import OpenFolders from '../components/OpenFolders'
 const Settings: React.FC = () => {
   return (
     <div>

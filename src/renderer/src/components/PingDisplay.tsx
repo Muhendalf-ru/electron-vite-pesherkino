@@ -18,7 +18,7 @@ const PingDisplay: React.FC = () => {
 
   useEffect(() => {
     fetchPing()
-    const interval = setInterval(fetchPing, 10000) // каждые 10 сек
+    const interval = setInterval(fetchPing, 10000)
     return () => clearInterval(interval)
   }, [])
 
