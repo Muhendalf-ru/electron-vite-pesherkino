@@ -73,16 +73,34 @@ export function checkRequiredFiles(): void {
   }
 }
 
-export function runSingbox(configPath: string): void {
+export function runSingbox(configPath: string, singboxPath: string): void {
   const singboxExe = path.join(singboxPath, 'sing-box.exe')
-  if (!fs.existsSync(singboxExe)) throw new Error('sing-box.exe не найден')
 
-  spawn(singboxExe, ['run', '-c', configPath], {
+  console.log('Запуск sing-box:')
+  console.log('singboxExe:', singboxExe)
+  console.log('configPath:', configPath)
+
+  if (!fs.existsSync(singboxExe)) throw new Error('sing-box.exe не найден')
+  if (!fs.existsSync(configPath)) throw new Error('config.json не найден')
+
+  const child = spawn(singboxExe, ['run', '-c', configPath], {
+    cwd: singboxPath,
     detached: true,
-    stdio: 'ignore',
-    cwd: singboxPath
-  }).unref()
+    stdio: 'inherit'
+ // Вернуть на 'inherit' при отладке
+  })
+
+  child.unref()
+
+  child.on('error', (err) => {
+    console.error('Ошибка при запуске sing-box:', err)
+  })
+
+  child.on('exit', (code) => {
+    console.log('sing-box завершился с кодом:', code)
+  })
 }
+
 
 export async function isSingboxRunning(): Promise<boolean> {
   return new Promise((resolve) => {

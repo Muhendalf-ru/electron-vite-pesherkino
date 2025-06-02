@@ -241,7 +241,9 @@ const UserInfo: React.FC = () => {
       <p className="warning-text-user">
         ⚠️ После смены конфига не забывайте перезапускать Discord Fix
       </p>
-      <p className="warning-text-user">⚡️ Скоро: Запуск Proxy без запуска Discord</p>
+      <p className="warning-text-user">
+        ⚡️ Скоро: Запуск Proxy без запуска Discord  
+      </p>
     </div>
   )
 }

@@ -42,7 +42,7 @@ ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
     checkRequiredFiles()
     copyPatchFiles(singboxPath)
 
-    runSingbox(configPath) // переделать
+    runSingbox(configPath, singboxPath) // переделать
 
     const discordPath = getLatestDiscordAppPath()
     const discordExe = path.join(discordPath, 'Discord.exe')
@@ -133,37 +133,37 @@ ipcMain.handle(
   'save-config-file',
   async (_event, filename: string, content: string, link?: string) => {
     try {
-      // Путь в статичные ресурсы (для прокси)
       const filePath = path.join(singboxPath, filename)
 
-      let finalContent = content
+      // Парсим исходный контент в объект (если нужно будет обработать)
+      const parsedContent = JSON.parse(content)
 
-      if (link) {
-        const parsed = JSON.parse(content)
-        parsed.currentLink = link
-        finalContent = JSON.stringify(parsed, null, 2)
+      // Убираем currentLink из контента, чтобы его не записывать в singboxPath
+      if ('currentLink' in parsedContent) {
+        delete parsedContent.currentLink
       }
 
-      // Записываем полный конфиг в singboxPath
+      // Записываем в singboxPath конфиг БЕЗ currentLink
+      const finalContent = JSON.stringify(parsedContent, null, 2)
       await fs.promises.writeFile(filePath, finalContent, 'utf8')
 
-      // Записываем только currentLink в AppData\Roaming\PesherkinoVPN\config.json
       if (link) {
         await fs.promises.mkdir(configDir, { recursive: true })
 
-        // Читаем существующий конфиг из AppData
-        let appDataConfig: { currentLink?: string } = {}
+        // Читаем существующий конфиг из AppData (если есть)
+        let appDataConfig: Record<string, any> = {}
         try {
           const existing = await fs.promises.readFile(userConfigPath, 'utf8')
           appDataConfig = JSON.parse(existing)
         } catch {
+          // Если файла нет или ошибка чтения — используем пустой объект
           appDataConfig = {}
         }
 
-        // Обновляем поле currentLink
+        // Обновляем/добавляем поле currentLink, сохраняя остальные поля
         appDataConfig.currentLink = link
 
-        // Записываем обратно в файл
+        // Записываем обновленный конфиг обратно в AppData
         await fs.promises.writeFile(userConfigPath, JSON.stringify(appDataConfig, null, 2), 'utf8')
       }
 
@@ -174,10 +174,8 @@ ipcMain.handle(
   }
 )
 
+
 ipcMain.handle('check-config-exists', async (_event) => {
-  // const fs = require('fs')
-  // const path = require('path')
-  // const configPath = path.join(app.getPath('userData'), filename)
   const configPath = path.join(singboxPath, 'config.json')
 
   try {
