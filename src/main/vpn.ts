@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs'
 import { spawn, exec } from 'child_process'
 import { app } from 'electron'
-import { clearActivity, setActivity, stopDiscordRPC } from './DiscordRpc/discordPresence'
 
 const isDev = !app.isPackaged
 
@@ -159,6 +158,7 @@ export function getDiscordRpcEnabled(): boolean {
 }
 
 import { EventEmitter } from 'events'
+import { setActivity, stopDiscordRPC, clearActivity } from './DiscordRpc/discordPresence'
 
 const vpnEmitter = new EventEmitter()
 

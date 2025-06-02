@@ -21,6 +21,7 @@ const api = {
 
   updateDiscordStatus: () => ipcRenderer.invoke('update-discord-status'),
 
+
   invoke: (channel: string, ...args: any[]) => ipcRenderer.invoke(channel, ...args),
   getPing: () => ipcRenderer.invoke('get-ping'),
   getDiscordRpcEnabled: () => ipcRenderer.invoke('get-discord-rpc-enabled'),

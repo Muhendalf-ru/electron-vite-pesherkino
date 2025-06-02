@@ -1,3 +1,4 @@
+// Основные импорты Electron и модулей проекта
 import { app, BrowserWindow, dialog, ipcMain } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { createWindow } from './window'
@@ -7,22 +8,13 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import './ipcHandlers'
 import fs from 'fs'
 import path from 'path'
-
-import {
-  getDiscordRpcEnabled,
-  isSingboxRunning,
-  onVpnStatusChanged,
-  setDiscordRpcEnabled,
-  startVpnStatusWatcher,
-  stopSingboxAndDiscord,
-  stopVpnStatusWatcher
-} from './vpn'
-
-import { initDiscordRPC, stopDiscordRPC } from './DiscordRpc/discordPresence'
+import  { initDiscordRPC, stopDiscordRPC } from './DiscordRpc/discordPresence'
+import { getDiscordRpcEnabled, stopSingboxAndDiscord,  startVpnStatusWatcher,  stopVpnStatusWatcher, isSingboxRunning, setDiscordRpcEnabled,  onVpnStatusChanged } from './vpn'
 
 let mainWindow: BrowserWindow | null = null
 let isQuitting = false
 
+// Основная функция для инициализации приложения
 function setupApp(): void {
   electronApp.setAppUserModelId('com.electron')
 
@@ -33,9 +25,9 @@ function setupApp(): void {
   mainWindow = createWindow()
   createTray(mainWindow)
 
-  // Автообновление
   autoUpdater.checkForUpdatesAndNotify()
 
+  // Обработка обновлений
   autoUpdater.on('update-available', () => {
     mainWindow?.webContents.send('update-message', 'Доступно обновление...')
   })
@@ -65,6 +57,7 @@ function setupApp(): void {
     mainWindow?.webContents.send('update-message', `Ошибка автообновления: ${err.message}`)
   })
 
+  // Ручная проверка обновлений
   ipcMain.on('check-for-updates', () => {
     mainWindow?.webContents.send('update-message', 'Проверка обновлений...')
     autoUpdater.checkForUpdates()
@@ -85,6 +78,7 @@ function setupApp(): void {
   })
 }
 
+// Запуск при готовности приложения
 app.whenReady().then(async () => {
   setupApp()
 
@@ -99,6 +93,7 @@ app.whenReady().then(async () => {
   }
 })
 
+// Закрытие всех окон
 app.on('window-all-closed', async () => {
   try {
     await stopDiscordRPC()
@@ -109,7 +104,7 @@ app.on('window-all-closed', async () => {
   app.quit()
 })
 
-// Логи
+// Пути к логам (dev/prod)
 const isDev = !app.isPackaged
 const logFilePath = isDev
   ? path.join('C:\\Github Project\\electron-vite-pesherkino', 'resources', 'console')
@@ -119,6 +114,7 @@ export function getLogFilePath(): string {
   return logFilePath
 }
 
+// Получение логов через IPC
 ipcMain.handle('get-logs', async () => {
   try {
     return await fs.promises.readFile(logFilePath, 'utf-8')
@@ -128,7 +124,7 @@ ipcMain.handle('get-logs', async () => {
   }
 })
 
-// Корректное завершение при выходе
+// Перед выходом: корректное завершение
 app.on('before-quit', async (event) => {
   if (isQuitting) return
   event.preventDefault()
@@ -141,7 +137,7 @@ app.on('before-quit', async (event) => {
   }
 
   try {
-    await stopVpnStatusWatcher() // <--- добавить, если не вызывается через stopSingboxAndDiscord
+    await stopVpnStatusWatcher()
   } catch (e) {
     console.error('Ошибка при остановке VPN watcher:', e)
   }
@@ -175,20 +171,16 @@ async function handleProcessExit() {
 process.on('SIGINT', handleProcessExit)
 process.on('SIGTERM', handleProcessExit)
 
-/**
- * IPC: получить текущее состояние Discord RPC (true/false)
- */
+// Получение текущего состояния Discord RPC
 ipcMain.handle('get-discord-rpc-enabled', () => {
   return getDiscordRpcEnabled()
 })
 
-// IPC - VPN watcher
+// Управление VPN watcher'ом
 ipcMain.handle('start-vpn-watcher', () => startVpnStatusWatcher())
 ipcMain.handle('stop-vpn-watcher', () => stopVpnStatusWatcher())
 
-/**
- * IPC: получить текущее состояние VPN (true/false)
- */
+// Получение текущего статуса VPN
 ipcMain.handle('get-vpn-status', async () => {
   try {
     return await isSingboxRunning()
@@ -197,26 +189,21 @@ ipcMain.handle('get-vpn-status', async () => {
   }
 })
 
-/**
- * IPC: изменить состояние Discord RPC (вкл/выкл)
- */
+// Изменение состояния Discord RPC (вкл/выкл)
 ipcMain.handle('set-discord-rpc-enabled', async (_, enabled: boolean) => {
   try {
     setDiscordRpcEnabled(enabled)
 
     if (enabled) {
-      // Остановим старый клиент и вотчер, если были
       try {
         await stopDiscordRPC()
         await stopVpnStatusWatcher()
       } catch (e: unknown) {
         console.warn('stopDiscordRPC перед init ошибся:', e)
       }
-      stopVpnStatusWatcher()
       await initDiscordRPC()
       await startVpnStatusWatcher()
     } else {
-      // Очищаем статус и останавливаем всё
       try {
         await stopDiscordRPC()
       } catch (e: unknown) {
@@ -225,16 +212,13 @@ ipcMain.handle('set-discord-rpc-enabled', async (_, enabled: boolean) => {
       stopVpnStatusWatcher()
     }
 
-    // Уведомляем рендерер о смене статуса
     mainWindow?.webContents.send('discord-rpc-status-changed', enabled)
   } catch (err) {
     console.error('Ошибка при смене состояния Discord RPC:', err)
   }
 })
 
-/**
- * IPC: подписка на изменения VPN-статуса
- */
+// Подписка на изменение статуса VPN
 ipcMain.handle('on-vpn-status-changed', (event) => {
   const webContents = event.sender
   const listener = (running: boolean) => {
@@ -242,31 +226,19 @@ ipcMain.handle('on-vpn-status-changed', (event) => {
   }
   onVpnStatusChanged(listener)
 
-  // Когда рендерер вызовет 'remove-vpn-status-listener', уберём подписку
-  const removeListener = () => {
-    onVpnStatusChanged(() => {}) // просто заглушка, EventEmitter не удаляет анонимные
-  }
-
   ipcMain.on('remove-vpn-status-listener', (removeEvent) => {
     if (removeEvent.sender === webContents) {
-      removeListener()
+      onVpnStatusChanged(() => {}) // заглушка
     }
   })
 })
 
-/**
- * IPC: подписка на изменения Discord RPC-статуса
- */
-
+// Подписка на изменение статуса Discord RPC (пустая заглушка)
 ipcMain.handle('on-discord-rpc-status-changed', (event) => {
   const webContents = event.sender
-  // Здесь можно реализовать подписку на событие, если потребуется
-
-  // Для удаления слушателя используем отдельный ipcMain.on
   ipcMain.on('remove-discord-rpc-status-listener', (removeEvent) => {
     if (removeEvent.sender === webContents) {
-      // Здесь можно удалить слушателя, если он был добавлен
-      // Например: someEmitter.removeListener('discord-rpc-status-changed', listener)
+      // Удаление слушателя при необходимости
     }
   })
 })
