@@ -3,7 +3,7 @@
   border-radius: 12px;
   max-width: 95%;
   width: 600px;
-  margin: 2rem auto;
+  margin: 0 auto 2rem auto;
   padding: 0 2rem 2rem 2rem;
   color: #e0e0e0;
   font-size: 0.95rem;
@@ -79,11 +79,14 @@
     }
   }
 
-  &::before {
+  &.loading::before,
+  &.error::before,
+  &.no-data::before {
     content: '';
     display: inline-block;
     width: 24px;
     height: 24px;
+    margin-bottom: 1rem; /* если нужен отступ снизу от иконки */
   }
 
   /* Состояния: loading, error, no-data */
@@ -93,6 +96,11 @@
     font-weight: 600;
     font-size: 1.1rem;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 10px;
+    padding-top: 10px;
   }
 
   &.loading {

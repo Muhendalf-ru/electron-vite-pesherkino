@@ -161,8 +161,12 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
+  font-size: 0.8rem;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+
 
   &:hover {
     background-color: #3a5fcc;
