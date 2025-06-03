@@ -1,23 +1,24 @@
 import { useTelegram } from '@renderer/hooks/useTelegram'
 import { GitHubSVG } from '@renderer/svg/GitHub'
 import { TelegramSVG } from '@renderer/svg/Telegram'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 
 function Header(): React.JSX.Element {
   const location = useLocation()
-  const isDiscord = location.pathname === '/discord-fix'
-  const isLogs = location.pathname === '/logs'
-  const isSettings = location.pathname === '/settings'
+  const navLinks = [
+    { path: '/', label: 'Main Page' },
+    { path: '/discord-fix', label: 'Discord Fix' },
+    { path: '/logs', label: 'Logs' },
+    { path: '/settings', label: 'Settings' }
+  ]
 
   const { telegramId, setTelegramId } = useTelegram()
   const [inputValue, setInputValue] = useState('')
   const [updateStatus, setUpdateStatus] = useState('')
 
   useEffect(() => {
-    if (telegramId) {
-      setInputValue(telegramId)
-    }
+    telegramId && setInputValue(telegramId)
   }, [telegramId])
 
   useEffect(() => {
@@ -35,19 +36,20 @@ function Header(): React.JSX.Element {
     return undefined
   }, [])
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-    const val = e.target.value
-    setInputValue(val)
-    setTelegramId(val)
+  const handleChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value
+      setInputValue(val)
+      setTelegramId(val)
 
-    if (window.electronAPI?.saveTelegramId) {
       try {
-        await window.electronAPI.saveTelegramId(val)
+        await window.electronAPI?.saveTelegramId?.(val)
       } catch (error) {
         console.error('Failed to save Telegram ID', error)
       }
-    }
-  }
+    },
+    [setTelegramId]
+  )
 
   const handleCheckUpdates = (): void => {
     if (window.electronAPI?.checkForUpdates) {
@@ -61,26 +63,13 @@ function Header(): React.JSX.Element {
       <h2>Pesherkino VPN</h2>
 
       <ul className="nav_links">
-        <li>
-          <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-            Main Page
-          </Link>
-        </li>
-        <li>
-          <Link to="/discord-fix" className={isDiscord ? 'active' : ''}>
-            Discord Fix
-          </Link>
-        </li>
-        <li>
-          <Link to="/logs" className={isLogs ? 'active' : ''}>
-            Logs
-          </Link>
-        </li>
-        <li>
-          <Link to="/settings" className={isSettings ? 'active' : ''}>
-            Settings
-          </Link>
-        </li>
+        {navLinks.map(({ path, label }) => (
+          <li key={path}>
+            <Link to={path} className={location.pathname === path ? 'active' : ''}>
+              {label}
+            </Link>
+          </li>
+        ))}
       </ul>
 
       <input
@@ -92,7 +81,11 @@ function Header(): React.JSX.Element {
         spellCheck={false}
       />
 
-      <button className="update_button" onClick={handleCheckUpdates}>
+      <button
+        className="update_button"
+        onClick={handleCheckUpdates}
+        disabled={updateStatus === 'Проверка обновлений...'}
+      >
         Check Update
       </button>
 

@@ -1,0 +1,93 @@
+.speedtestContainer {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e0e0e0;
+  background-color: #2c2f48;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  max-width: 400px;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-left: 275px;
+  margin-bottom: 25px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+.resultsBox {
+  min-height: 120px; /* чтобы не дергалось */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.resultItem {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #b0b3c6;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonsContainer {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+button {
+  background-color: #222438;
+  color: #e0e0e0;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+button:hover {
+  background-color: #4caf50;
+  color: #e0e0e0;
+}
+
+button:active {
+  background-color: #3a8b3a;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+}
+
+.pingValue {
+  color: #ffa726; /* Оранжевый, символизирует задержку */
+  font-weight: 600;
+  padding-left: 5px;
+}
+
+.downloadValue {
+  color: #42a5f5; /* Голубой, для скачивания */
+  font-weight: 600;
+  padding-left: 5px;
+}
+
+.uploadValue {
+  color: #66bb6a; /* Зеленый, для загрузки */
+  font-weight: 600;
+  padding-left: 5px;
+}

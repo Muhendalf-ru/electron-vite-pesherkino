@@ -1,7 +1,17 @@
-import { ipcMain } from "electron"
-import { checkRequiredFiles, getSingboxPath, getTelegramId, isSingboxRunning, onVpnStatusChanged, runSingbox, startVpnStatusWatcher, stopSingboxAndDiscord, stopVpnStatusWatcher } from "../../vpn"
-import path from "path"
-import { copyPatchFiles, getLatestDiscordAppPath, spawnDiscord } from "../Discord/discord"
+import { ipcMain } from 'electron'
+import {
+  checkRequiredFiles,
+  getSingboxPath,
+  getTelegramId,
+  isSingboxRunning,
+  onVpnStatusChanged,
+  runSingbox,
+  startVpnStatusWatcher,
+  stopSingboxAndDiscord,
+  stopVpnStatusWatcher
+} from '../../vpn'
+import path from 'path'
+import { copyPatchFiles, getLatestDiscordAppPath, spawnDiscord } from '../Discord/discord'
 import fs from 'fs'
 import { exec } from 'child_process'
 

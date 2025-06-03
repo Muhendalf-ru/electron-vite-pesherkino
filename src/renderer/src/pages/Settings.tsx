@@ -1,6 +1,7 @@
 import React from 'react'
 import DiscordRpcToggle from '../components/DiscordRPC'
 import OpenFolders from '../components/OpenFolders'
+import Speedtest from '@renderer/components/SpeedTest'
 const Settings: React.FC = () => {
   return (
     <div>
@@ -17,7 +18,7 @@ const Settings: React.FC = () => {
         />
       </div>
       <OpenFolders />
-
+      <Speedtest />
       <p className="warning-text-user">⚡️ Скоро: Возможность менять PORT вашего Proxy</p>
     </div>
   )

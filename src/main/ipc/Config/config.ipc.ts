@@ -1,7 +1,7 @@
-import { app, ipcMain } from "electron"
-import path from "path"
+import { app, ipcMain } from 'electron'
+import path from 'path'
 import fs from 'fs'
-import { saveTelegramId } from "../../vpn"
+import { saveTelegramId } from '../../vpn'
 
 ipcMain.handle('check-config-exists', async (_event) => {
   const configPath = path.join(singboxPath, 'config.json')

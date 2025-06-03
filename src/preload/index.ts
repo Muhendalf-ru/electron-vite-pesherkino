@@ -44,6 +44,10 @@ const api = {
     })
   },
 
+  speedtest: {
+    run: () => ipcRenderer.invoke('run-speedtest')
+  },
+
   getProxyConnections: () => ipcRenderer.invoke('get-proxy-connections'),
   // VPN статус
   getVpnStatus: () => ipcRenderer.invoke('get-vpn-status'),

@@ -29,6 +29,9 @@ declare global {
       checkConfigExists: (filename: string) => Promise<boolean>
       getProxyConnections: () => Promise<any>
       getSingBoxStatus: () => Promise<boolean>
+      speedtest: {
+        run: () => Promise<{ ping: number | null; download: number | null; upload: number | null }>
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
-import { app, ipcMain } from "electron"
-import path from "path"
+import { app, ipcMain } from 'electron'
+import path from 'path'
 import fs from 'fs'
 
 const isDev = !app.isPackaged

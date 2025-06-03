@@ -25,111 +25,97 @@ const UserInfo: React.FC = () => {
   const { data, loading, error } = useSelector((state: RootState) => state.userInfo)
   const showLinks = useSelector((state: RootState) => state.ui.showLinks)
 
-  const allLinks: DisplayLink[] = useMemo(() => {
+  // Собираем все ссылки в один массив с мемоизацией
+  const allLinks = useMemo<DisplayLink[]>(() => {
     if (!data) return []
-
-    const vlessLinks: DisplayLink[] = data.vlessLinks.map(
-      ({ link, expiryTime, location, _id }) => ({
+    return [
+      ...data.vlessLinks.map(({ link, expiryTime, location, _id }) => ({
         link,
         expiryTime,
         location,
         _id,
-        type: 'vless'
-      })
-    )
-
-    const vlessLiteLinks: DisplayLink[] = data.vlessLinksLite.map(
-      ({ link, expiryTime, location, _id }) => ({
+        type: 'vless' as const
+      })),
+      ...data.vlessLinksLite.map(({ link, expiryTime, location, _id }) => ({
         link,
         expiryTime,
         location,
         _id,
-        type: 'vlessLite'
-      })
-    )
-
-    const promoLinks: DisplayLink[] = data.promoLinks.map(
-      ({ link, expiryTime, location, _id }) => ({
+        type: 'vlessLite' as const
+      })),
+      ...data.promoLinks.map(({ link, expiryTime, location, _id }) => ({
         link,
         expiryTime,
         location,
         _id,
-        type: 'promo'
-      })
-    )
-
-    const adminLinks: DisplayLink[] = data.adminLinks.map(
-      ({ link, expiryTime, location, _id }) => ({
+        type: 'promo' as const
+      })),
+      ...data.adminLinks.map(({ link, expiryTime, location, _id }) => ({
         link,
         expiryTime,
         location,
         _id,
-        type: 'admin'
-      })
-    )
-
-    return [...vlessLinks, ...vlessLiteLinks, ...promoLinks, ...adminLinks]
+        type: 'admin' as const
+      }))
+    ]
   }, [data])
 
+  // Загрузка информации при появлении telegramId
   useEffect(() => {
     if (telegramId && !data) {
       dispatch(fetchUserInfo(telegramId))
     }
   }, [telegramId, dispatch, data])
 
+  // Проверка текущего выбранного региона из сохранённого конфига
   useEffect(() => {
-    const checkSelectedConfig = async () => {
-      const exists = await electronAPI.checkConfigExists('config.json')
-      if (exists && allLinks.length > 0) {
-        const savedLink = generateConfigFromLink(allLinks[0].link)
-        const region = savedLink?.outbounds?.[0]?.tag
-        setSelectedRegion(region || null)
+    const checkConfig = async () => {
+      if (allLinks.length === 0) return
+      try {
+        const exists = await electronAPI.checkConfigExists('config.json')
+        if (exists) {
+          const savedConfig = generateConfigFromLink(allLinks[0].link)
+          const region = savedConfig?.outbounds?.[0]?.tag ?? null
+          setSelectedRegion(region)
+        }
+      } catch (e) {
+        console.error('Error checking config:', e)
       }
     }
-
-    checkSelectedConfig()
+    checkConfig()
   }, [allLinks])
 
+  // Проверка текущей ссылки из Electron
   useEffect(() => {
-    const checkSelectedLink = async () => {
-      if (!allLinks.length) return
-
+    const checkCurrentLink = async () => {
+      if (allLinks.length === 0) return
       try {
         const savedLink = await electronAPI.invoke('get-current-link')
         if (savedLink) {
-          const matching = allLinks.find((l) => l.link === savedLink)
-          if (matching) {
-            setSelectedRegion(matching.location)
-          }
+          const matched = allLinks.find((l) => l.link === savedLink)
+          setSelectedRegion(matched?.location ?? null)
         }
       } catch (e) {
-        console.error('Ошибка при получении текущего линка:', e)
+        console.error('Error getting current link:', e)
       }
     }
-
-    checkSelectedLink()
+    checkCurrentLink()
   }, [allLinks])
 
   const saveConfigToFile = useCallback(async (link: string, location: string) => {
     const config = generateConfigFromLink(link)
-    const configWithLink = {
-      ...config,
-      currentLink: link
+    if (!config) {
+      alert('Некорректная ссылка')
+      return
     }
-    const content = JSON.stringify(configWithLink, null, 2)
-    const filename = 'config.json'
-
+    const content = JSON.stringify({ ...config, currentLink: link }, null, 2)
     try {
-      const result = await electronAPI.invoke('save-config-file', filename, content, link)
+      const result = await electronAPI.invoke('save-config-file', 'config.json', content, link)
       if (result.success) {
-        new Notification('Успешно', {
-          body: `Конфиг успешно применен: ${location}`
-        })
+        new Notification('Успешно', { body: `Конфиг успешно применен: ${location}` })
         setSelectedRegion(location)
       } else {
-        new Notification('Ошибка', {
-          body: `Ошибка сохранения: ${result.error}`
-        })
+        new Notification('Ошибка', { body: `Ошибка сохранения: ${result.error}` })
       }
     } catch (e) {
       alert(`Ошибка IPC: ${(e as Error).message}`)
@@ -139,13 +125,9 @@ const UserInfo: React.FC = () => {
   const copyToClipboard = useCallback(async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      new Notification('Скопировано', {
-        body: 'Ссылка скопирована в буфер обмена'
-      })
+      new Notification('Скопировано', { body: 'Ссылка скопирована в буфер обмена' })
     } catch {
-      new Notification('Ошибка', {
-        body: 'Не удалось скопировать ссылку'
-      })
+      new Notification('Ошибка', { body: 'Не удалось скопировать ссылку' })
     }
   }, [])
 
@@ -154,9 +136,20 @@ const UserInfo: React.FC = () => {
   if (!data) return <div className="user-info no-data">Нет данных</div>
 
   return (
-    <div className="user-info">
+    <div className="user-info" role="region" aria-label="Информация о пользователе">
       <h2>Информация о пользователе</h2>
-      <div className="section">
+      <p className="info-footer">
+        Сделано для Telegram-бота{' '}
+        <a
+          href="https://t.me/pesherkino_bot?start=ref_855347094"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pesherkino VPN{' '}
+        </a>
+        авторизация идет через Telegram ID.
+      </p>
+      <section className="section">
         <p>
           <strong>Telegram ID:</strong> {data.telegramId}
         </p>
@@ -176,7 +169,7 @@ const UserInfo: React.FC = () => {
             <strong>UUID:</strong> {data.uuid}
           </p>
         )}
-      </div>
+      </section>
 
       <h3>
         <button
@@ -191,12 +184,12 @@ const UserInfo: React.FC = () => {
       </h3>
 
       {showLinks && (
-        <div className="section">
-          {allLinks.length > 0 ? (
+        <section className="section" aria-live="polite">
+          {allLinks.length ? (
             allLinks.map(({ link, expiryTime, location, _id, type }) => {
               const isSelected = selectedRegion === location
               return (
-                <div key={_id} className="admin-link">
+                <article key={_id} className="admin-link" tabIndex={0}>
                   <p>
                     <strong>Тип:</strong> {type}
                   </p>
@@ -216,6 +209,9 @@ const UserInfo: React.FC = () => {
                       className="copyable"
                       onClick={() => copyToClipboard(link)}
                       title="Кликните, чтобы скопировать"
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && copyToClipboard(link)}
                     >
                       Копировать
                     </span>
@@ -223,22 +219,21 @@ const UserInfo: React.FC = () => {
                   <button
                     onClick={() => saveConfigToFile(link, location)}
                     className="download-config-btn"
+                    aria-pressed={isSelected}
                   >
                     {isSelected ? '✅ Выбран' : 'Выбрать регион'}
                   </button>
-                </div>
+                </article>
               )
             })
           ) : (
             <p>Ссылок нет</p>
           )}
-        </div>
+        </section>
       )}
+
       <p className="warning-text-user">
         ⚠️ После смены конфига не забывайте перезапускать Discord Fix
-      </p>
-      <p className="warning-text-user">
-        ⚡️ Скоро: Запуск Proxy без запуска Discord  
       </p>
     </div>
   )

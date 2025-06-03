@@ -99,7 +99,6 @@ export function runSingbox(configPath: string, singboxPath: string): void {
   })
 }
 
-
 export async function isSingboxRunning(): Promise<boolean> {
   return new Promise((resolve) => {
     const cmd = process.platform === 'win32' ? 'tasklist' : 'ps aux'

@@ -8,6 +8,7 @@ import './ipc/Logs/logs.ipc'
 import './ipc/Proxy/proxy.ipc'
 import './ipc/utils/utils.ipc'
 import './ipc/Window/window.ipc'
+import './ipc/Speedtest/speedtest.ipc'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import {
   getDiscordRpcEnabled,
@@ -119,7 +120,7 @@ app.on('before-quit', async (event) => {
   }
 
   try {
-    await stopVpnStatusWatcher() 
+    await stopVpnStatusWatcher()
   } catch (e) {
     console.error('Ошибка при остановке VPN watcher:', e)
   }
@@ -180,4 +181,3 @@ ipcMain.handle('set-discord-rpc-enabled', async (_, enabled: boolean) => {
     console.error('Ошибка при смене состояния Discord RPC:', err)
   }
 })
-

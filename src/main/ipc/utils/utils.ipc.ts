@@ -1,6 +1,6 @@
-import { ipcMain } from "electron"
-import { getSocks5Ping } from "../Proxy/proxy"
-import { getTelegramId } from "../../vpn"
+import { ipcMain } from 'electron'
+import { getSocks5Ping } from '../Proxy/proxy'
+import { getTelegramId } from '../../vpn'
 
 ipcMain.handle('get-ping', async () => {
   try {
