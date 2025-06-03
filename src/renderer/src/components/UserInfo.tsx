@@ -18,7 +18,7 @@ const electronAPI = window.electronAPI
 
 const UserInfo: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
-
+  const [selectedLink, setSelectedLink] = useState<string | null>(null)
   const { telegramId } = useTelegram()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -92,8 +92,7 @@ const UserInfo: React.FC = () => {
       try {
         const savedLink = await electronAPI.invoke('get-current-link')
         if (savedLink) {
-          const matched = allLinks.find((l) => l.link === savedLink)
-          setSelectedRegion(matched?.location ?? null)
+          setSelectedLink(savedLink)
         }
       } catch (e) {
         console.error('Error getting current link:', e)
@@ -114,6 +113,7 @@ const UserInfo: React.FC = () => {
       if (result.success) {
         new Notification('Успешно', { body: `Конфиг успешно применен: ${location}` })
         setSelectedRegion(location)
+        setSelectedLink(link)
       } else {
         new Notification('Ошибка', { body: `Ошибка сохранения: ${result.error}` })
       }
@@ -158,6 +158,9 @@ const UserInfo: React.FC = () => {
           <a href={data.staticLink} target="_blank" rel="noopener noreferrer">
             {data.staticLink}
           </a>
+          <p>
+            <strong>Выбранный регион:</strong> {selectedRegion ?? 'не выбран'}
+          </p>
         </p>
         {data.email && (
           <p>
@@ -187,7 +190,7 @@ const UserInfo: React.FC = () => {
         <section className="section" aria-live="polite">
           {allLinks.length ? (
             allLinks.map(({ link, expiryTime, location, _id, type }) => {
-              const isSelected = selectedRegion === location
+              const isSelected = selectedLink === link
               return (
                 <article key={_id} className="admin-link" tabIndex={0}>
                   <p>

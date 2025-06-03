@@ -57,11 +57,9 @@ function Header(): React.JSX.Element {
       setUpdateStatus('Проверка обновлений...')
     }
   }
-
   return (
     <div className="header_wrapper">
       <h2>Pesherkino VPN</h2>
-
       <ul className="nav_links">
         {navLinks.map(({ path, label }) => (
           <li key={path}>
