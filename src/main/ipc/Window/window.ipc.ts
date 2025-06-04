@@ -18,7 +18,6 @@ ipcMain.on('window-maximize', (event) => {
 ipcMain.on('window-close', (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
   if (win) {
-    // Прячем в трей вместо закрытия
     win.hide()
     event.preventDefault()
   }

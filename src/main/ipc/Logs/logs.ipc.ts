@@ -1,11 +1,6 @@
-import { app, ipcMain } from 'electron'
-import path from 'path'
+import { ipcMain } from 'electron'
 import fs from 'fs'
-
-const isDev = !app.isPackaged
-const logFilePath = isDev
-  ? path.join('C:\\Github Project\\electron-vite-pesherkino', 'resources', 'console')
-  : path.resolve(process.resourcesPath, 'app.asar.unpacked', 'resources', 'console')
+import { logFilePath } from '../../constants/constants'
 
 export function getLogFilePath(): string {
   return logFilePath

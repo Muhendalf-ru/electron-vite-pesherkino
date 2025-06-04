@@ -1,19 +1,17 @@
 import { ipcMain } from 'electron'
+import path from 'path'
 import {
   checkRequiredFiles,
-  getSingboxPath,
-  getTelegramId,
-  isSingboxRunning,
-  onVpnStatusChanged,
-  runSingbox,
-  startVpnStatusWatcher,
-  stopSingboxAndDiscord,
-  stopVpnStatusWatcher
-} from '../../vpn'
-import path from 'path'
-import { copyPatchFiles, getLatestDiscordAppPath, spawnDiscord } from '../Discord/discord'
+  copyPatchFiles,
+  getLatestDiscordAppPath,
+  spawnDiscord
+} from '../Discord/discord'
 import fs from 'fs'
 import { exec } from 'child_process'
+import { configFilePath, singboxPath } from '../../constants/constants'
+import { stopSingboxAndDiscord, isSingboxRunning, runSingbox } from '../Singbox/singbox'
+import { getTelegramId } from '../Config/config'
+import { onVpnStatusChanged, startVpnStatusWatcher, stopVpnStatusWatcher } from './proxy'
 
 ipcMain.handle('stop-vpn', async () => {
   return stopSingboxAndDiscord()
@@ -26,19 +24,11 @@ ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
       throw new Error('Telegram ID not provided')
     }
 
-    // 🛑 Останавливаем Discord и Sing-box, если уже запущены
     await stopSingboxAndDiscord()
-
-    // const configData = await fetchConfig(telegramId)
-
-    const singboxPath = getSingboxPath()
-    const configPath = path.join(singboxPath, 'config.json') // Переделать
-    // fs.writeFileSync(configPath, configData)
 
     checkRequiredFiles()
     copyPatchFiles(singboxPath)
-
-    runSingbox(configPath, singboxPath) // переделать
+    runSingbox(configFilePath, singboxPath)
 
     const discordPath = getLatestDiscordAppPath()
     const discordExe = path.join(discordPath, 'Discord.exe')
@@ -110,19 +100,6 @@ ipcMain.handle('on-vpn-status-changed', (event) => {
   ipcMain.on('remove-vpn-status-listener', (removeEvent) => {
     if (removeEvent.sender === webContents) {
       removeListener()
-    }
-  })
-})
-
-ipcMain.handle('on-discord-rpc-status-changed', (event) => {
-  const webContents = event.sender
-  // Здесь можно реализовать подписку на событие, если потребуется
-
-  // Для удаления слушателя используем отдельный ipcMain.on
-  ipcMain.on('remove-discord-rpc-status-listener', (removeEvent) => {
-    if (removeEvent.sender === webContents) {
-      // Здесь можно удалить слушателя, если он был добавлен
-      // Например: someEmitter.removeListener('discord-rpc-status-changed', listener)
     }
   })
 })

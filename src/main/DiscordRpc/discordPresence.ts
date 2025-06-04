@@ -1,5 +1,5 @@
 import { Client } from 'discord-rpc'
-import { isSingboxRunning } from '../vpn'
+import { isSingboxRunning } from '../ipc/Singbox/singbox'
 
 const clientId = '1378082680339697775'
 let rpc: Client | null = null

@@ -1,131 +1,126 @@
 .discord-container {
-  background-color: rgba(41, 43, 58, 0.9);
-  padding: 2rem;
-  border-radius: 8px;
-  width: 320px;
+  background: #1e1f2a;
+  padding: 0 2rem 2rem;
+  border-radius: 16px;
+  width: 360px;
   max-width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1;
-  transition: box-shadow 0.5s ease;
   box-sizing: border-box;
-  overflow-wrap: break-word; /* перенос слов */
-  word-break: break-word;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.4s ease;
 
   &.vpn-on {
-    box-shadow: 0 0 15px rgba(0, 255, 100, 0.6);
+    box-shadow: 0 0 15px rgba(0, 255, 150, 0.5);
+    animation: pulse-green 2s infinite ease-in-out;
   }
 
   &.vpn-off {
-    box-shadow: 0 0 15px rgba(255, 50, 50, 0.6);
+    box-shadow: 0 0 15px rgba(255, 80, 80, 0.5);
+    animation: pulse-red 2s infinite ease-in-out;
   }
 }
 
-.discord-input {
-  width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 1rem;
+@keyframes pulse-green {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(0, 255, 150, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(0, 255, 150, 0.7);
+  }
+}
+
+@keyframes pulse-red {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(255, 80, 80, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 80, 80, 0.7);
+  }
+}
+
+.discord-title {
+  font-size: 1.8rem;
+  color: #ffffff;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.discord-help-icon {
+  background: none;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: #3a3c57;
-  color: #eee;
-  outline: none;
-  transition: background-color 0.3s ease;
-  box-sizing: border-box;
+  color: #7aa9ff;
+  padding: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #aaccff;
+  }
 
   &:focus {
-    background-color: #50537a;
+    outline: 2px solid #7aa9ff;
+    outline-offset: 3px;
   }
 }
 
 .discord-button {
   width: 100%;
-  padding: 0.7rem;
-  background-color: #395fb6;
-  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #3f5efb;
   border: none;
-  border-radius: 4px;
-  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.25s ease;
-  margin-bottom: 15px;
-  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
 
   &:hover:not(:disabled) {
-    background-color: #5c73b9;
+    background-color: #576ffb;
   }
 
   &:disabled {
-    background-color: #414657;
+    background-color: #2f354d;
     cursor: not-allowed;
   }
 
   &--danger {
-    background-color: #c44040;
+    background-color: #d7384e;
 
     &:hover:not(:disabled) {
-      background-color: #a85959;
+      background-color: #b52f44;
     }
   }
 }
 
 .discord-status {
-  margin-top: 1rem;
-  font-weight: bold;
   text-align: center;
-  min-height: 1.2em;
-
-  &--error {
-    color: #c94545;
-  }
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  min-height: 1.5em;
+  font-weight: 600;
 
   &--success {
-    color: #32a832;
+    color: #4cd964;
   }
-}
 
-.discord-title {
-  text-align: center;
-  font-size: 1.5rem;
-  -webkit-user-select: none;
-  user-select: none;
+  &--error {
+    color: #ff5e5e;
+  }
 }
 
 .discord-wrapper {
   height: 77vh;
-  overflow-y: auto;
-  width: 100%;
-  max-width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-x: hidden;
-  flex-direction: column;
-}
-
-.discord-help-icon {
-  background: transparent;
-  border: none;
-  color: #8ab4f8;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 4px;
-  margin-top: 12px;
-  -webkit-user-select: none;
-  user-select: none;
-  transition: color 0.3s ease;
-  width: 15%;
-
-  &:hover {
-    color: #62a0ff;
-  }
-
-  &:focus {
-    outline: 2px solid #62a0ff;
-    outline-offset: 2px;
-  }
 }
 
 .discord-overlay {
@@ -134,42 +129,41 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); // затемнение фона
+  background-color: rgba(15, 15, 20, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; // поверх всего приложения
+  z-index: 1000;
 }
 
 .discord-warning-modal {
-  background-color: #292b3a; // можно такой же фон, как у контейнера
-  padding: 1.5rem;
-  border-radius: 8px;
-  max-width: 90vw;
-  max-height: 90vh;
+  background-color: #282a36;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  max-height: 80vh;
   overflow-y: auto;
-  color: #eee;
+  color: #f8f8f2;
   position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
 }
 
 .discord-warnng-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  color: #ff6b6b;
   background: transparent;
   border: none;
-  color: #eee;
-  font-size: 1.5rem;
   cursor: pointer;
-  transition:
-    color 0.3s ease,
-    transform 0.2s ease;
+  transition: transform 0.2s ease;
 
   &:hover {
-    color: #62a0ff; // светло-голубой при наведении
+    color: #ff8787;
   }
 
   &:active {
-    transform: scale(0.85); // чуть уменьшается при нажатии
+    transform: scale(0.9);
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "pesherkino-vpn",
-  "version": "2.0.32",
+  "version": "2.0.34",
   "description": "Pesherkino VPN",
   "main": "./out/main/index.js",
   "author": "Muhendalf",

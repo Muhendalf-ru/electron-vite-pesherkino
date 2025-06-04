@@ -1,20 +1,19 @@
 import got from 'got'
 import { SocksProxyAgent } from 'socks-proxy-agent'
 import FormData from 'form-data'
+import {
+  proxyUrl,
+  PING_TEST_URL,
+  testFileUrl,
+  FILE_SIZE,
+  DOWNLOAD_PARTS,
+  UPLOAD_SIZE,
+  uploadUrl,
+  UPLOAD_PARALLEL
+} from '../../constants/constants'
 
-const proxyUrl = 'socks5h://127.0.0.1:1080'
 const agent = new SocksProxyAgent(proxyUrl)
 
-const testFileUrl = 'https://speed.hetzner.de/100MB.bin'
-const uploadUrl = 'https://httpbin.org/post'
-
-const FILE_SIZE = 100 * 1024 * 1024 // 100MB
-const DOWNLOAD_PARTS = 64
-const UPLOAD_SIZE = 100 * 1024 * 1024 // 10MB
-const UPLOAD_PARALLEL = 3
-const PING_TEST_URL = 'https://discord.com'
-
-// Пинг — делаем 5 запросов и берем минимальный ответ (чтобы фильтровать выбросы)
 export async function pingTest() {
   const attempts = 5
   let minPing = Infinity
@@ -33,13 +32,12 @@ export async function pingTest() {
   return minPing === Infinity ? null : minPing
 }
 
-// Загружаем части файла параллельно
 async function downloadPart(start: number, end: number) {
   const response = await got(testFileUrl, {
     agent: { https: agent },
     headers: { Range: `bytes=${start}-${end}` },
     responseType: 'buffer',
-    https: { rejectUnauthorized: false } // если надо отключить проверку сертификата
+    https: { rejectUnauthorized: false }
   })
   return response.rawBody.length
 }
@@ -68,7 +66,6 @@ export async function downloadTest() {
   }
 }
 
-// Отправляем несколько параллельных POST с формой по 10MB
 async function uploadOnce() {
   const form = new FormData()
   const buffer = Buffer.alloc(UPLOAD_SIZE, 'x')
@@ -78,7 +75,7 @@ async function uploadOnce() {
     agent: { https: agent },
     body: form,
     headers: form.getHeaders(),
-    https: { rejectUnauthorized: false } // если надо
+    https: { rejectUnauthorized: false }
   })
 
   return buffer.length
@@ -98,7 +95,7 @@ export async function uploadTest() {
     const totalBytes = results.reduce((a, b) => a + b, 0)
     const durationSec = (Date.now() - startTime) / 1000
 
-    return (totalBytes * 8) / durationSec / 1e6 // Mbps
+    return (totalBytes * 8) / durationSec / 1e6
   } catch (error) {
     console.error('Upload test failed:', error)
     return null

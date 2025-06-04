@@ -1,6 +1,8 @@
 import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
+import { loadConfig, saveConfig } from '../Config/config'
+import { singboxPath } from '../../constants/constants'
 
 export function spawnDiscord(discordExe: string, discordPath: string): void {
   spawn(discordExe, [], {
@@ -60,5 +62,28 @@ export function deletePatchFiles(): { success: boolean; error?: string } {
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : String(err)
     return { success: false, error: errorMessage }
+  }
+}
+
+export function setDiscordRpcEnabled(enabled: boolean): void {
+  const cfg = loadConfig()
+  cfg.discordRpcEnabled = enabled
+  saveConfig(cfg)
+}
+
+export function getDiscordRpcEnabled(): boolean {
+  const cfg = loadConfig()
+  return !!cfg.discordRpcEnabled
+}
+
+export function checkRequiredFiles(): void {
+  const filesPath = path.join(singboxPath, 'dll')
+  if (!fs.existsSync(filesPath)) throw new Error(`Папка не найдена: ${filesPath}`)
+
+  const requiredFiles = ['DWrite.dll', 'force-proxy.dll', 'proxy.txt']
+  for (const file of requiredFiles) {
+    if (!fs.existsSync(path.join(filesPath, file))) {
+      throw new Error(`Файл не найден: ${file}`)
+    }
   }
 }

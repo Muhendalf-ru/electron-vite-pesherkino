@@ -1,7 +1,8 @@
-import { app, ipcMain } from 'electron'
+import { ipcMain } from 'electron'
 import path from 'path'
 import fs from 'fs'
-import { saveTelegramId } from '../../vpn'
+import { configDir, configFilePath, singboxPath, userConfigPath } from '../../constants/constants'
+import { saveTelegramId } from './config'
 
 ipcMain.handle('check-config-exists', async (_event) => {
   const configPath = path.join(singboxPath, 'config.json')
@@ -12,15 +13,6 @@ ipcMain.handle('check-config-exists', async (_event) => {
     return false
   }
 })
-
-const isDev = !app.isPackaged
-
-const singboxPath = isDev
-  ? path.resolve(__dirname, '../../resources')
-  : path.resolve(process.resourcesPath, 'app.asar.unpacked', 'resources')
-
-const configDir = path.join(app.getPath('appData'), 'PesherkinoVPN')
-const userConfigPath = path.join(configDir, 'config.json')
 
 ipcMain.handle(
   'save-config-file',
@@ -38,7 +30,9 @@ ipcMain.handle(
 
       // Записываем в singboxPath конфиг БЕЗ currentLink
       const finalContent = JSON.stringify(parsedContent, null, 2)
-      await fs.promises.writeFile(filePath, finalContent, 'utf8')
+      await fs.promises.mkdir(configDir, { recursive: true }) // Создаст папку, если её нет
+
+      await fs.promises.writeFile(configFilePath, finalContent, 'utf8')
 
       if (link) {
         await fs.promises.mkdir(configDir, { recursive: true })

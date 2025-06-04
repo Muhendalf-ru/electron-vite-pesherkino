@@ -109,7 +109,12 @@ const UserInfo: React.FC = () => {
     }
     const content = JSON.stringify({ ...config, currentLink: link }, null, 2)
     try {
-      const result = await electronAPI.invoke('save-config-file', 'config.json', content, link)
+      const result = await electronAPI.invoke(
+        'save-config-file',
+        'config-proxy.json',
+        content,
+        link
+      )
       if (result.success) {
         new Notification('Успешно', { body: `Конфиг успешно применен: ${location}` })
         setSelectedRegion(location)
@@ -158,9 +163,9 @@ const UserInfo: React.FC = () => {
           <a href={data.staticLink} target="_blank" rel="noopener noreferrer">
             {data.staticLink}
           </a>
-          <p>
-            <strong>Выбранный регион:</strong> {selectedRegion ?? 'не выбран'}
-          </p>
+        </p>
+        <p>
+          <strong>Выбранный регион:</strong> {selectedRegion ?? 'не выбран'}
         </p>
         {data.email && (
           <p>

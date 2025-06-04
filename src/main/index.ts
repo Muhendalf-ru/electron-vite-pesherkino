@@ -10,17 +10,12 @@ import './ipc/utils/utils.ipc'
 import './ipc/Window/window.ipc'
 import './ipc/Speedtest/speedtest.ipc'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import {
-  getDiscordRpcEnabled,
-  setDiscordRpcEnabled,
-  startVpnStatusWatcher,
-  stopSingboxAndDiscord,
-  stopVpnStatusWatcher
-} from './vpn'
-
 import { initDiscordRPC, stopDiscordRPC } from './DiscordRpc/discordPresence'
+import { stopSingboxAndDiscord } from './ipc/Singbox/singbox'
+import { getDiscordRpcEnabled } from './ipc/Discord/discord'
+import { startVpnStatusWatcher, stopVpnStatusWatcher } from './ipc/Proxy/proxy'
 
-let mainWindow: BrowserWindow | null = null
+export let mainWindow: BrowserWindow | null = null
 let isQuitting = false
 
 function setupApp(): void {
@@ -152,32 +147,3 @@ async function handleProcessExit() {
 
 process.on('SIGINT', handleProcessExit)
 process.on('SIGTERM', handleProcessExit)
-
-ipcMain.handle('set-discord-rpc-enabled', async (_, enabled: boolean) => {
-  try {
-    setDiscordRpcEnabled(enabled)
-
-    if (enabled) {
-      try {
-        await stopDiscordRPC()
-        await stopVpnStatusWatcher()
-      } catch (e: unknown) {
-        console.warn('stopDiscordRPC перед init ошибся:', e)
-      }
-      stopVpnStatusWatcher()
-      await initDiscordRPC()
-      await startVpnStatusWatcher()
-    } else {
-      try {
-        await stopDiscordRPC()
-      } catch (e: unknown) {
-        console.warn('stopDiscordRPC при выключении ошибся:', e)
-      }
-      stopVpnStatusWatcher()
-    }
-
-    mainWindow?.webContents.send('discord-rpc-status-changed', enabled)
-  } catch (err) {
-    console.error('Ошибка при смене состояния Discord RPC:', err)
-  }
-})
