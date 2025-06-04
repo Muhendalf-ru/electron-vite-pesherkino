@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import * as Sentry from '@sentry/electron/renderer'
 
 export type AdminLink = {
   link: string
@@ -49,6 +50,7 @@ export const fetchUserInfo = createAsyncThunk<UserInfoType, string, { rejectValu
       if (error instanceof Error) {
         return thunkAPI.rejectWithValue(error.message)
       }
+      Sentry.captureException(error)
       return thunkAPI.rejectWithValue('Неизвестная ошибка')
     }
   }

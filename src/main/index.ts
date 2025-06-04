@@ -10,10 +10,32 @@ import './ipc/utils/utils.ipc'
 import './ipc/Window/window.ipc'
 import './ipc/Speedtest/speedtest.ipc'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { initDiscordRPC, stopDiscordRPC } from './DiscordRpc/discordPresence'
+import { stopDiscordRPC } from './DiscordRpc/discordPresence'
 import { stopSingboxAndDiscord } from './ipc/Singbox/singbox'
-import { getDiscordRpcEnabled } from './ipc/Discord/discord'
-import { startVpnStatusWatcher, stopVpnStatusWatcher } from './ipc/Proxy/proxy'
+import { startDiscordRpcWatcher } from './ipc/Discord/discord'
+import { stopVpnStatusWatcher } from './ipc/Proxy/proxy'
+import * as Sentry from '@sentry/electron/main'
+
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  debug: true
+})
+
+// const err = new Error('Manual test error ' + new Date().toISOString())
+
+// console.log('Sending error:', err.message)
+
+// Sentry.captureException(err, {
+//   tags: {
+//     origin: 'manual-test'
+//   },
+//   fingerprint: ['manual-test', new Date().toISOString()]
+// })
+
+// Sentry.flush(3000).then(() => {
+//   console.log('Flushed, exiting...')
+//   process.exit(1)
+// })
 
 export let mainWindow: BrowserWindow | null = null
 let isQuitting = false
@@ -81,16 +103,7 @@ function setupApp(): void {
 
 app.whenReady().then(async () => {
   setupApp()
-
-  const discordEnabled = await getDiscordRpcEnabled()
-  if (discordEnabled) {
-    try {
-      await initDiscordRPC()
-      await startVpnStatusWatcher()
-    } catch (err) {
-      console.error('Ошибка при запуске Discord RPC или VPN watcher:', err)
-    }
-  }
+  await startDiscordRpcWatcher()
 })
 
 app.on('window-all-closed', async () => {
@@ -147,3 +160,11 @@ async function handleProcessExit() {
 
 process.on('SIGINT', handleProcessExit)
 process.on('SIGTERM', handleProcessExit)
+
+process.on('uncaughtException', (error) => {
+  Sentry.captureException(error)
+})
+
+process.on('unhandledRejection', (reason) => {
+  Sentry.captureException(reason)
+})

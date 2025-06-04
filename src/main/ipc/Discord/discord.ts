@@ -2,7 +2,8 @@ import { spawn } from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import { loadConfig, saveConfig } from '../Config/config'
-import { singboxPath } from '../../constants/constants'
+import { singboxPath, userConfigPath } from '../../constants/constants'
+import { initDiscordRPC, stopDiscordRPC } from '../../DiscordRpc/discordPresence'
 
 export function spawnDiscord(discordExe: string, discordPath: string): void {
   spawn(discordExe, [], {
@@ -85,5 +86,36 @@ export function checkRequiredFiles(): void {
     if (!fs.existsSync(path.join(filesPath, file))) {
       throw new Error(`Файл не найден: ${file}`)
     }
+  }
+}
+
+function isDiscordRpcEnabled(): boolean {
+  try {
+    const configRaw = fs.readFileSync(userConfigPath, 'utf-8')
+    const config = JSON.parse(configRaw)
+    return !!config.discordRpcEnabled
+  } catch (e) {
+    console.error('[RPC] Не удалось прочитать config.json:', e)
+    return false
+  }
+}
+
+let checkInterval: NodeJS.Timeout | null = null
+
+export async function startDiscordRpcWatcher(): Promise<void> {
+  if (checkInterval) return
+  checkInterval = setInterval(async () => {
+    if (isDiscordRpcEnabled()) {
+      await initDiscordRPC()
+    } else {
+      await stopDiscordRPC()
+    }
+  }, 5000)
+}
+
+export function stopDiscordRpcWatcher(): void {
+  if (checkInterval) {
+    clearInterval(checkInterval)
+    checkInterval = null
   }
 }

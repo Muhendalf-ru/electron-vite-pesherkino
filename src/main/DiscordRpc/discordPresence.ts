@@ -5,8 +5,6 @@ const clientId = '1378082680339697775'
 let rpc: Client | null = null
 let isReady = false
 
-let reconnectTimeout: NodeJS.Timeout | null = null
-
 export async function initDiscordRPC(): Promise<void> {
   if (rpc) return
   rpc = new Client({ transport: 'ipc' })
@@ -14,10 +12,6 @@ export async function initDiscordRPC(): Promise<void> {
   rpc.on('ready', async () => {
     isReady = true
     console.log('[RPC] Hooked!')
-    if (reconnectTimeout) {
-      clearTimeout(reconnectTimeout)
-      reconnectTimeout = null
-    }
     try {
       const running = await isSingboxRunning()
       if (running) {
@@ -34,12 +28,7 @@ export async function initDiscordRPC(): Promise<void> {
     isReady = false
     console.log('[RPC] Disconnected!')
     rpc = null
-    if (!reconnectTimeout) {
-      reconnectTimeout = setTimeout(() => {
-        reconnectTimeout = null
-        initDiscordRPC()
-      }, 5000)
-    }
+    // Переподключение теперь не здесь, а через вотчер!
   })
 
   try {
@@ -48,12 +37,7 @@ export async function initDiscordRPC(): Promise<void> {
     console.error('[RPC] Login error:', err)
     isReady = false
     rpc = null
-    if (!reconnectTimeout) {
-      reconnectTimeout = setTimeout(() => {
-        reconnectTimeout = null
-        initDiscordRPC()
-      }, 5000)
-    }
+    // Переподключение теперь не здесь, а через вотчер!
   }
 }
 
@@ -104,21 +88,13 @@ export function clearActivity(): void {
 }
 
 export async function stopDiscordRPC(): Promise<void> {
-  if (!rpc) return
-  if (isReady) {
+  if (rpc) {
     try {
-      await rpc.request('SET_ACTIVITY', { pid: process.pid, activity: {} })
-      console.log('[RPC] Activity cleared')
-    } catch (err) {
-      console.error('[RPC] Clear activity error:', err)
+      await rpc.destroy()
+    } catch (e) {
+      // ignore
     }
+    rpc = null
+    isReady = false
   }
-  try {
-    await rpc.destroy()
-    console.log('[RPC] Destroyed')
-  } catch (err) {
-    console.error('[RPC] Destroy error:', err)
-  }
-  rpc = null
-  isReady = false
 }

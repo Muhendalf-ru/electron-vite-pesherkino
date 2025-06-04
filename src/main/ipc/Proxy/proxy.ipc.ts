@@ -51,7 +51,6 @@ ipcMain.handle('get-proxy-connections', async () => {
   return new Promise((resolve) => {
     exec('netstat -ano | findstr :1080', (err, stdout) => {
       if (err || !stdout) return resolve([])
-
       const connections = stdout
         .trim()
         .split('\n')
