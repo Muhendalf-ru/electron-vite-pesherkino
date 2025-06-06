@@ -7,6 +7,7 @@ import TitleBar from './components/TitleBar'
 import { Footer } from './components/Footer'
 import LogsViewer from './pages/LogsViewer'
 import Settings from './pages/Settings'
+import MainProxy from './pages/MainProxy'
 
 function App(): React.ReactElement {
   return (
@@ -19,6 +20,7 @@ function App(): React.ReactElement {
           <Route path="/discord-fix" element={<Discord />} />
           <Route path="/logs" element={<LogsViewer />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/proxy" element={<MainProxy />} />
         </Routes>
       </HashRouter>
       <Footer />

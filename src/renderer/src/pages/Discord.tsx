@@ -119,7 +119,7 @@ function Discord(): React.JSX.Element {
     <div className="discord-wrapper">
       <div className={`discord-container ${vpnRunning ? 'vpn-on' : 'vpn-off'}`}>
         <h1 className="discord-title">
-          Discord Proxy
+          Discord Fix
           <button
             className="discord-help-icon"
             onClick={toggleWarning}
@@ -134,13 +134,13 @@ function Discord(): React.JSX.Element {
         <button
           onClick={handleRunVpnSetup}
           className="discord-button"
-          disabled={vpnRunning || status === 'Running...'}
+          disabled={vpnRunning || status === 'Запуск...'}
         >
-          {status === 'Running...' ? 'Running...' : 'Run VPN Setup'}
+          {status === 'Запуск...' ? 'Запуск...' : 'Запустить'}
         </button>
 
         <button onClick={handleStopVpn} className="discord-button" disabled={!vpnRunning}>
-          Stop VPN
+          Остановить
         </button>
 
         <button
@@ -148,7 +148,7 @@ function Discord(): React.JSX.Element {
           className="discord-button discord-button--danger"
           disabled={isDeleting}
         >
-          {isDeleting ? 'Delete...' : 'Delete Discord DLL'}
+          {isDeleting ? 'Удаление...' : 'Удалить DLL'}
         </button>
 
         {status && (

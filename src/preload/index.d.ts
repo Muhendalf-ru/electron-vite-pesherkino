@@ -32,6 +32,23 @@ declare global {
       speedtest: {
         run: () => Promise<{ ping: number | null; download: number | null; upload: number | null }>
       }
+      getProcessList: () => Promise<Process[]>
+      onProcessListUpdate: (callback: (processes: Process[]) => void) => void
+      onProcessListError: (callback: (error: string) => void) => void
+      removeProcessListListeners: () => void
+      saveProcessConfig: (data: {
+        selectedProcesses: Process[]
+        overwrite: boolean
+      }) => Promise<boolean>
+      getSavedProcesses: () => Promise<Process[]>
+      readUserConfig: () => Promise<{
+        discordRpcEnabled?: boolean
+        telegramId?: string
+        currentLink?: string
+      }>
+      generateConfigFromLink: (link: string) => Promise<any>
+      saveTunConfig: (config: any) => Promise<boolean>
+      runSingbox: () => Promise<void>
     }
   }
 }

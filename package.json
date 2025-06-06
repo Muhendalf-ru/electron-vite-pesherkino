@@ -1,6 +1,6 @@
 {
   "name": "pesherkino-vpn",
-  "version": "2.0.35",
+  "version": "2.0.36",
   "description": "Pesherkino VPN",
   "main": "./out/main/index.js",
   "author": "Muhendalf",
@@ -33,6 +33,7 @@
     "electron-packager-languages": "^0.6.0",
     "electron-updater": "^6.3.9",
     "express": "^5.1.0",
+    "node-ps": "^0.0.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
     "socks-proxy-agent": "^8.0.5",
@@ -43,6 +44,7 @@
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/node": "^22.14.1",
+    "@types/ps-list": "^6.2.1",
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.2",
     "@types/react-redux": "^7.1.34",

@@ -6,7 +6,7 @@ const iconPath = path.join(__dirname, '../../resources/icon.ico')
 
 export function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
-    width: 950,
+    width: 1200,
     height: 800,
     resizable: false,
     autoHideMenuBar: true,

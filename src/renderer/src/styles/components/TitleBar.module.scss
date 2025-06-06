@@ -5,63 +5,105 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 32px;
-  padding: 0 12px;
-  background-color: #1e1e1e;
-  color: #eee;
+  height: 38px;
+  padding: 0 16px;
+  background: rgba(30, 32, 45, 0.95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #e0e0e0;
   font-size: 14px;
   font-weight: 500;
   -webkit-user-select: none;
   user-select: none;
   -webkit-app-region: drag;
+  border-bottom: 1px solid rgba(75, 121, 230, 0.1);
+  transition: all 0.3s ease;
 
-  div:first-child {
-    -webkit-user-select: none;
-    user-select: none;
+  &:hover {
+    border-bottom-color: rgba(75, 121, 230, 0.2);
+  }
+
+  .custom-titlebar-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #4b79e6;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(75, 121, 230, 0.5);
+    }
   }
 
   .custom-titlebar-buttons {
     display: flex;
-    gap: 8px;
+    gap: 4px;
 
     button {
       all: unset;
-      width: 36px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
-      color: #eee;
+      color: #e0e0e0;
       cursor: pointer;
       -webkit-app-region: no-drag;
+      border-radius: 6px;
+      transition: all 0.2s ease;
 
       &:hover {
-        background-color: #3a3a3a;
-        border-radius: 4px;
+        background: rgba(75, 121, 230, 0.1);
+        color: #fff;
       }
 
       &:active {
-        background-color: #555;
+        background: rgba(75, 121, 230, 0.2);
       }
     }
 
     button:last-child {
-      color: #f56565;
+      color: #ff6b6b;
 
       &:hover {
-        background-color: #b33a3a;
+        background: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
       }
 
       &:active {
-        background-color: #8a2828;
+        background: rgba(255, 107, 107, 0.2);
       }
     }
   }
 
   .custom-titlebar-vpn-status {
-    font-size: 0.9rem;
-    color: #a0ffa0;
+    font-size: 0.85rem;
+    color: #4caf50;
     font-weight: 500;
+    padding: 4px 8px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #4caf50;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+    }
   }
 }

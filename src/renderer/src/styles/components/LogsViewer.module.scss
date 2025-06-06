@@ -5,52 +5,86 @@ $font-size-large: 1.4em;
 
 $color-light: #dcdcdc;
 $color-dark: #181818;
-$color-primary: #007bff;
-$color-primary-dark: #0056b3;
-$color-primary-darker: #004080;
+$color-primary: #4b79e6;
+$color-primary-dark: #3a5fcc;
+$color-primary-darker: #2a4fbc;
 $color-warning: #f7ca71;
 $color-error: #ff6e6e;
 $color-info: #6ec1ff;
 $color-muted: #888;
 $color-light-text: #999;
 $border-color: #333;
+$color-success: #4caf50;
 
-$log-container-height: 400px; // Максимальная высота для контейнера логов
+$log-container-height: 400px;
 
 .logs-viewer {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   font-family: 'Consolas', 'Courier New', Courier, monospace;
+  background: rgba(30, 32, 45, 0.5);
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid rgba(75, 121, 230, 0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+
+  &:hover {
+    border-color: rgba(75, 121, 230, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    color: $color-primary;
+    font-size: $font-size-medium;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
 
   .logs-header {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(75, 121, 230, 0.2);
   }
 
   .logs-title {
     margin: 0;
-    flex: 1;
     font-size: $font-size-medium;
     color: $color-light;
+    font-weight: 600;
   }
 
   .logs-button {
-    padding: 6px 12px;
-    margin-right: 8px;
-    background-color: #4b79e6;
+    padding: 8px 16px;
+    background-color: $color-primary;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: $font-size-small;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     &:hover {
-      background-color: #3a5fcc;
+      background-color: $color-primary-dark;
+      transform: translateY(-1px);
     }
 
     &:active {
       background-color: $color-primary-darker;
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      background-color: $color-muted;
+      cursor: not-allowed;
+      transform: none;
     }
   }
 
@@ -59,11 +93,14 @@ $log-container-height: 400px; // Максимальная высота для к
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: $color-light-text;
+    color: $color-primary;
     font-size: $font-size-base;
     display: none;
+    background: rgba(24, 24, 24, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
-    /* Показываем, если загрузка активна */
     &.active {
       display: block;
     }
@@ -72,145 +109,114 @@ $log-container-height: 400px; // Максимальная высота для к
   .error-message {
     color: $color-error;
     text-align: center;
-    margin-top: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255, 110, 110, 0.1);
+    border-radius: 4px;
   }
 
   .log-container {
-    background: $color-dark;
-    border: 1px solid $border-color;
-    border-radius: 6px;
+    background: rgba(24, 24, 24, 0.8);
+    border: 1px solid rgba(75, 121, 230, 0.2);
+    border-radius: 8px;
     overflow-y: auto;
-    padding: 12px;
-    margin-top: 4px;
+    padding: 15px;
+    margin-top: 10px;
     max-height: $log-container-height;
     position: relative;
-
-    /* Flexbox для внутреннего выравнивания */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-bottom: 160px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    // margin-bottom: 20px;
 
     hr {
-      border: none; // убираем стандартную рамку
-      border-top: 1px solid #444; // тонкая серая линия
-      margin: 8px 0; // отступы сверху и снизу
-      width: 100%; // на всю ширину контейнера
-    }
-  }
-
-  .log-line {
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-size: $font-size-small;
-    padding: 2px 0;
-    color: $color-light; // Default text color
-
-    &.info {
-      color: $color-info;
-    }
-
-    &.warn {
-      color: $color-warning;
-    }
-
-    &.error {
-      color: $color-error;
-    }
-
-    &.empty {
-      color: $color-muted;
-      font-style: italic;
-    }
-  }
-
-  .log-line {
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-size: $font-size-small;
-    padding: 2px 0;
-    color: $color-light; // Default text color
-
-    &.info {
-      color: $color-info;
+      border: none;
+      border-top: 1px solid rgba(75, 121, 230, 0.2);
+      margin: 12px 0;
+      width: 100%;
     }
   }
 
   .log-info {
     display: flex;
-    gap: 13px;
+    gap: 15px;
     font-weight: 600;
-    color: #eee;
+    color: $color-primary;
+    padding: 10px;
+    background: rgba(75, 121, 230, 0.1);
+    border-radius: 6px;
+    margin-bottom: 10px;
   }
 
-  .log-info,
   .connection-line {
     display: flex;
     justify-content: center;
     font-family: monospace;
-    font-weight: 600;
-    color: #eee;
-    padding: 2px 5px;
+    padding: 8px 10px;
     align-items: center;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: rgba(75, 121, 230, 0.1);
+    }
+
+    &.empty {
+      color: $color-muted;
+      font-style: italic;
+      padding: 20px;
+      text-align: center;
+      background: rgba(136, 136, 136, 0.1);
+      border-radius: 6px;
+    }
+
+    &.active {
+      background: rgba(76, 175, 80, 0.1);
+    }
   }
 
   .col {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
+    padding: 0 10px;
+    border-right: 1px solid rgba(75, 121, 230, 0.2);
 
-  .col.pid {
-    flex-basis: 9%;
-    text-align: right;
-    color: $color-info;
-    padding-right: 40px;
-    display: flex;
-    justify-content: center;
-  }
+    &:last-child {
+      border-right: none;
+    }
 
-  .col.process {
-    flex-basis: 15%;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-  }
+    &.pid {
+      flex-basis: 9%;
+      text-align: right;
+      color: $color-info;
+      padding-right: 20px;
+    }
 
-  .col.proto {
-    flex-basis: 10%;
-    // text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-  }
+    &.process {
+      flex-basis: 15%;
+      font-weight: 600;
+      color: $color-light;
+    }
 
-  .col.local {
-    flex-basis: 18%;
-    display: flex;
-    justify-content: center;
-  }
+    &.proto {
+      flex-basis: 10%;
+      color: $color-primary;
+    }
 
-  .col.foreign {
-    flex-basis: 18%;
-    display: flex;
-    justify-content: center;
-  }
+    &.local {
+      flex-basis: 18%;
+      color: $color-light;
+    }
 
-  .col.state {
-    flex-basis: 12%;
-    // padding-left: 15px;
-    text-align: center;
-    font-weight: 600;
-    color: #aaf;
-    display: flex;
-    justify-content: center;
-  }
+    &.foreign {
+      flex-basis: 18%;
+      color: $color-light;
+    }
 
-  .connection-line .col {
-    padding-left: 10px; // отступ справа, чтобы граница не прилегала к тексту
-    border-right: 1px solid #444; // вертикальная линия (тонкая серая)
-  }
-
-  .connection-line .col:last-child {
-    border-right: none; // у последней колонки линии не будет
+    &.state {
+      flex-basis: 12%;
+      text-align: center;
+      font-weight: 600;
+      color: $color-success;
+    }
   }
 }

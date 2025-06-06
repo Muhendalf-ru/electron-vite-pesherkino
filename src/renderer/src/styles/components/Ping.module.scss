@@ -1,32 +1,60 @@
 .ping-display {
-  padding: 1rem;
-  // border-radius: 0.75rem;
-  // background-color: #27272a; // zinc-800
-  color: rgba(255, 255, 255, 0.9); // менее прозрачный белый
-  // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  width: fit-content;
-  color: #ffffffaf;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(30, 32, 45, 0.95);
+  // border: 1px solid rgba(75, 121, 230, 0.2);
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background: rgba(40, 42, 55, 0.95);
+    border-color: rgba(75, 121, 230, 0.3);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
 
   .label {
+    font-weight: 500;
+    color: rgba(224, 224, 224, 0.7);
+    font-size: 0.8rem;
+  }
+
+  .value {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-right: 0.25rem;
+    letter-spacing: 0.5px;
   }
 
   .loading {
-    color: rgba(255, 255, 255, 0.4); // gray-400
+    color: rgba(156, 163, 175, 0.7);
+    font-style: italic;
+    font-size: 0.8rem;
   }
 
   .error {
-    color: #f87171b4; // red-400
+    color: #ef4444;
+    font-weight: 500;
+    font-size: 0.8rem;
   }
 
   .ping {
     &.good {
-      color: #4ade80a9; // green-400
+      color: #4b79e6;
     }
 
     &.moderate {
-      color: #facc15bb; // yellow-400
+      color: #f59e0b;
+    }
+
+    &.bad {
+      color: #ef4444;
     }
   }
 }

@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, shell, type IpcRendererEvent } from 'electron'
+import type { Process } from '../main/ipc/Process/processManager'
 
 const api = {
   runVpnSetup: (telegramId?: string) => ipcRenderer.invoke('run-vpn-setup', telegramId),
@@ -52,7 +53,32 @@ const api = {
     return () => {
       ipcRenderer.removeListener('vpn-status-changed', listener)
     }
-  }
+  },
+
+  getProcessList: () => ipcRenderer.invoke('get-process-list'),
+
+  saveProcessConfig: (data: { selectedProcesses: Process[]; overwrite: boolean }) =>
+    ipcRenderer.invoke('save-process-config', data),
+
+  getSavedProcesses: () => ipcRenderer.invoke('get-saved-processes'),
+
+  onProcessListUpdate: (callback: (processes: Process[]) => void) => {
+    ipcRenderer.on('process-list-update', (_, processes) => callback(processes))
+  },
+
+  onProcessListError: (callback: (error: string) => void) => {
+    ipcRenderer.on('process-list-error', (_, error) => callback(error))
+  },
+
+  removeProcessListListeners: () => {
+    ipcRenderer.removeAllListeners('process-list-update')
+    ipcRenderer.removeAllListeners('process-list-error')
+  },
+
+  readUserConfig: () => ipcRenderer.invoke('read-user-config'),
+  generateConfigFromLink: (link: string) => ipcRenderer.invoke('generate-config-from-link', link),
+  saveTunConfig: (config: any) => ipcRenderer.invoke('save-tun-config', config),
+  runSingbox: () => ipcRenderer.invoke('run-singbox')
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

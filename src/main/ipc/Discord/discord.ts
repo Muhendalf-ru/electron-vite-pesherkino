@@ -37,14 +37,90 @@ export function getLatestDiscordAppPath(): string {
   return path.join(discordBase, appDirs[0])
 }
 
-export function copyPatchFiles(singboxPath: string): void {
+export async function copyPatchFiles(singboxPath: string): Promise<void> {
   const discordPath = getLatestDiscordAppPath()
   const filesPath = path.join(singboxPath, 'dll')
   const requiredFiles = ['DWrite.dll', 'force-proxy.dll', 'proxy.txt']
 
-  for (const file of requiredFiles) {
-    fs.copyFileSync(path.join(filesPath, file), path.join(discordPath, file))
+  // Функция для ожидания освобождения файла
+  const waitForFileUnlock = async (filePath: string, maxAttempts = 5): Promise<boolean> => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        // Пробуем открыть файл на запись
+        const fd = fs.openSync(filePath, 'r+')
+        fs.closeSync(fd)
+        return true
+      } catch (err) {
+        if (attempt === maxAttempts) {
+          console.error(`Файл ${filePath} заблокирован после ${maxAttempts} попыток`)
+          return false
+        }
+        // Ждем перед следующей попыткой
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+    return false
   }
+
+  // Функция для копирования одного файла с повторными попытками
+  const copyFileWithRetry = async (
+    sourceFile: string,
+    targetFile: string,
+    maxAttempts = 3
+  ): Promise<void> => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        // Проверяем существование исходного файла
+        if (!fs.existsSync(sourceFile)) {
+          throw new Error(`Исходный файл не найден: ${sourceFile}`)
+        }
+
+        // Проверяем существование целевой директории
+        const targetDir = path.dirname(targetFile)
+        if (!fs.existsSync(targetDir)) {
+          fs.mkdirSync(targetDir, { recursive: true })
+        }
+
+        // Ждем освобождения целевого файла, если он существует
+        if (fs.existsSync(targetFile)) {
+          const isUnlocked = await waitForFileUnlock(targetFile)
+          if (!isUnlocked) {
+            throw new Error(`Не удалось получить доступ к файлу: ${targetFile}`)
+          }
+        }
+
+        // Копируем файл
+        fs.copyFileSync(sourceFile, targetFile)
+        console.log(`Файл успешно скопирован: ${targetFile}`)
+        return
+      } catch (err) {
+        console.error(`Попытка ${attempt} из ${maxAttempts} не удалась:`, err)
+        if (attempt === maxAttempts) {
+          throw new Error(
+            `Не удалось скопировать файл ${sourceFile} после ${maxAttempts} попыток: ${err}`
+          )
+        }
+        // Ждем перед следующей попыткой
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+  }
+
+  // Копируем все файлы последовательно
+  for (const file of requiredFiles) {
+    const sourceFile = path.join(filesPath, file)
+    const targetFile = path.join(discordPath, file)
+
+    try {
+      console.log(`Копирование файла ${file}...`)
+      await copyFileWithRetry(sourceFile, targetFile)
+    } catch (err) {
+      console.error(`Ошибка при копировании ${file}:`, err)
+      throw new Error(`Ошибка при копировании ${file}: ${err}`)
+    }
+  }
+
+  console.log('Все файлы успешно скопированы')
 }
 
 export function deletePatchFiles(): { success: boolean; error?: string } {

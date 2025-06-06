@@ -1,19 +1,37 @@
 .footer {
-  background-color: #1e202f;
-  padding: 1rem 2rem;
+  background: rgba(30, 32, 45, 0.95);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 1.2rem 2rem;
   display: flex;
-  justify-content: center; /* сначала центрируем всё */
+  justify-content: center;
   align-items: center;
-  position: relative; /* нужно для позиционирования версии */
+  position: relative;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9rem;
   color: #b0b3c6;
+  border-top: 1px solid rgba(75, 121, 230, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-top-color: rgba(75, 121, 230, 0.2);
+  }
 }
 
 .footer-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem;
+  padding: 0 1rem;
+  background: rgba(30, 32, 45, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(75, 121, 230, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(75, 121, 230, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .footer a {
@@ -22,28 +40,66 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition:
-    color 0.3s ease,
-    transform 0.3s ease;
-}
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
 
-.footer a:hover {
-  color: #ffffff;
-  transform: scale(1.1);
-  cursor: pointer;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #4b79e6;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  &:hover {
+    color: #fff;
+    background: rgba(75, 121, 230, 0.1);
+
+    &::after {
+      width: 80%;
+    }
+  }
+
+  &:active {
+    background: rgba(75, 121, 230, 0.15);
+  }
 }
 
 .footer a svg {
   fill: currentColor;
-  width: 20px;
-  height: 20px;
-  transition: fill 0.3s ease;
+  width: 18px;
+  height: 18px;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 .footer-version {
   position: absolute;
   left: 2rem;
   font-size: 0.8rem;
-  opacity: 0.7;
+  color: #4b79e6;
+  opacity: 0.8;
   white-space: nowrap;
+  padding: 0.3rem 0.8rem;
+  background: rgba(75, 121, 230, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(75, 121, 230, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(75, 121, 230, 0.15);
+  }
 }

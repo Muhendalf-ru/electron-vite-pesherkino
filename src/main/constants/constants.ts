@@ -14,6 +14,8 @@ export const singboxPath = isDev
 
 export const configDir = path.join(app.getPath('appData'), 'PesherkinoVPN')
 export const userConfigPath = path.join(configDir, 'config.json')
+export const appConfigPath = path.join(configDir, 'app-list.json')
+export const tunConfigPath = path.join(configDir, 'tun-config.json')
 export const configFilePath = path.join(configDir, 'config-proxy.json')
 
 export const proxyUrl = 'socks5h://127.0.0.1:1080'

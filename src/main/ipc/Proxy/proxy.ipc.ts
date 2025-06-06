@@ -9,7 +9,7 @@ import {
 import fs from 'fs'
 import { exec } from 'child_process'
 import { configFilePath, singboxPath } from '../../constants/constants'
-import { stopSingboxAndDiscord, isSingboxRunning, runSingbox } from '../Singbox/singbox'
+import { stopSingboxAndDiscord, isSingboxRunning, runSingboxDiscord } from '../Singbox/singbox'
 import { getTelegramId } from '../Config/config'
 import { onVpnStatusChanged, startVpnStatusWatcher, stopVpnStatusWatcher } from './proxy'
 
@@ -18,28 +18,102 @@ ipcMain.handle('stop-vpn', async () => {
 })
 
 ipcMain.handle('run-vpn-setup', async (_event, telegramIdFromUI: string) => {
+  console.log('Начало настройки VPN...')
+
   try {
+    // Проверка Telegram ID
     const telegramId = telegramIdFromUI || getTelegramId()
     if (!telegramId) {
-      throw new Error('Telegram ID not provided')
+      console.error('Telegram ID не предоставлен')
+      throw new Error('Telegram ID не предоставлен')
+    }
+    console.log('Telegram ID получен:', telegramId)
+
+    // Остановка существующих процессов
+    console.log('Останавливаем существующие процессы...')
+    await stopSingboxAndDiscord()
+    console.log('Существующие процессы остановлены')
+
+    // Проверка и копирование файлов
+    console.log('Проверка необходимых файлов...')
+    try {
+      checkRequiredFiles()
+      console.log('Необходимые файлы проверены')
+    } catch (err) {
+      console.error('Ошибка при проверке файлов:', err)
+      throw new Error(
+        `Ошибка при проверке файлов: ${err instanceof Error ? err.message : String(err)}`
+      )
     }
 
-    await stopSingboxAndDiscord()
+    console.log('Копирование патч-файлов...')
+    try {
+      copyPatchFiles(singboxPath)
+      console.log('Патч-файлы скопированы')
+    } catch (err) {
+      console.error('Ошибка при копировании патч-файлов:', err)
+      throw new Error(
+        `Ошибка при копировании патч-файлов: ${err instanceof Error ? err.message : String(err)}`
+      )
+    }
 
-    checkRequiredFiles()
-    copyPatchFiles(singboxPath)
-    runSingbox(configFilePath, singboxPath)
+    // Запуск sing-box
+    console.log('Запуск sing-box...')
+    try {
+      runSingboxDiscord(configFilePath, singboxPath)
+      console.log('sing-box запущен')
+    } catch (err) {
+      console.error('Ошибка при запуске sing-box:', err)
+      throw new Error(
+        `Ошибка при запуске sing-box: ${err instanceof Error ? err.message : String(err)}`
+      )
+    }
 
+    // Запуск Discord
+    console.log('Поиск Discord...')
     const discordPath = getLatestDiscordAppPath()
     const discordExe = path.join(discordPath, 'Discord.exe')
-    if (!fs.existsSync(discordExe)) throw new Error('Discord.exe not found')
 
-    spawnDiscord(discordExe, discordPath)
+    if (!fs.existsSync(discordExe)) {
+      console.error('Discord.exe не найден по пути:', discordExe)
+      throw new Error(`Discord.exe не найден по пути: ${discordExe}`)
+    }
+    console.log('Discord найден:', discordExe)
 
-    return { success: true }
+    console.log('Запуск Discord...')
+    try {
+      spawnDiscord(discordExe, discordPath)
+      console.log('Discord запущен')
+    } catch (err) {
+      console.error('Ошибка при запуске Discord:', err)
+      throw new Error(
+        `Ошибка при запуске Discord: ${err instanceof Error ? err.message : String(err)}`
+      )
+    }
+
+    console.log('Настройка VPN успешно завершена')
+    return {
+      success: true,
+      message: 'VPN успешно настроен и запущен'
+    }
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : String(err)
-    return { success: false, error: errorMessage }
+    console.error('Ошибка при настройке VPN:', errorMessage)
+
+    // Попытка очистки в случае ошибки
+    try {
+      console.log('Очистка после ошибки...')
+      await stopSingboxAndDiscord()
+      console.log('Очистка завершена')
+    } catch (cleanupErr) {
+      console.error('Ошибка при очистке:', cleanupErr)
+    }
+
+    return {
+      success: false,
+      error: errorMessage,
+      details: err instanceof Error ? err.stack : undefined
+    }
   }
 })
 

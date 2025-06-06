@@ -1,15 +1,22 @@
 .speedtestContainer {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #e0e0e0;
-  background-color: #2c2f48;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
+  background: rgba(30, 32, 45, 0.5);
+  padding: 1.5rem;
+  border-radius: 10px;
   max-width: 400px;
+  border: 1px solid rgba(75, 121, 230, 0.1);
+  transition: all 0.3s ease;
   box-sizing: border-box;
   -webkit-user-select: none;
   user-select: none;
-  margin-left: 275px;
+  margin-left: 395px;
   margin-bottom: 25px;
+
+  &:hover {
+    border-color: rgba(75, 121, 230, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .title {
@@ -22,11 +29,15 @@
 }
 
 .resultsBox {
-  min-height: 120px; /* чтобы не дергалось */
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
+  background: rgba(30, 32, 45, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(75, 121, 230, 0.1);
 }
 
 .resultItem {
@@ -45,49 +56,48 @@
 }
 
 button {
-  background-color: #222438;
+  background: rgba(30, 32, 45, 0.5);
   color: #e0e0e0;
-  border: none;
+  border: 1px solid rgba(75, 121, 230, 0.1);
   padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 15px;
   cursor: pointer;
   box-sizing: border-box;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-}
+  transition: all 0.3s ease;
 
-button:hover {
-  background-color: #4caf50;
-  color: #e0e0e0;
-}
+  &:hover {
+    border-color: rgba(75, 121, 230, 0.2);
+    background: rgba(30, 32, 45, 0.7);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 
-button:active {
-  background-color: #3a8b3a;
-}
+  &:active {
+    background: rgba(30, 32, 45, 0.8);
+  }
 
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(75, 121, 230, 0.3);
+  }
 }
 
 .pingValue {
-  color: #ffa726; /* Оранжевый, символизирует задержку */
+  color: #ffa726;
   font-weight: 600;
   padding-left: 5px;
 }
 
 .downloadValue {
-  color: #42a5f5; /* Голубой, для скачивания */
+  color: #42a5f5;
   font-weight: 600;
   padding-left: 5px;
 }
 
 .uploadValue {
-  color: #66bb6a; /* Зеленый, для загрузки */
+  color: #66bb6a;
   font-weight: 600;
   padding-left: 5px;
 }

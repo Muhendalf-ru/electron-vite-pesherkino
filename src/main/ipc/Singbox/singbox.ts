@@ -20,7 +20,7 @@ export async function isSingboxRunning(): Promise<boolean> {
 
 export async function stopSingboxAndDiscord(): Promise<{ success: boolean; error?: any }> {
   try {
-    // Если нужно, раскомментируйте для остановки Discord RPC:
+    // Останавливаем Discord RPC и VPN статус
     await stopDiscordRPC()
     await stopVpnStatusWatcher()
   } catch (e) {
@@ -29,44 +29,121 @@ export async function stopSingboxAndDiscord(): Promise<{ success: boolean; error
 
   return new Promise((resolve) => {
     if (process.platform === 'win32') {
-      exec('taskkill /IM sing-box.exe /F', (err1) => {
-        exec('taskkill /IM Discord.exe /F', (err2) => {
-          if (err1 && err2) {
-            console.error('Не удалось остановить sing-box.exe и Discord.exe:', err1, err2)
-            resolve({ success: false, error: { singbox: err1, discord: err2 } })
-          } else if (err1) {
-            console.error('Не удалось остановить sing-box.exe:', err1)
-            resolve({ success: false, error: { singbox: err1 } })
-          } else if (err2) {
-            console.error('Не удалось остановить Discord.exe:', err2)
-            resolve({ success: false, error: { discord: err2 } })
-          } else {
-            resolve({ success: true })
-          }
+      // Функция для проверки существования процесса
+      const isProcessRunning = (processName: string): Promise<boolean> => {
+        return new Promise((resolve) => {
+          exec(`tasklist /FI "IMAGENAME eq ${processName}"`, (err, stdout) => {
+            if (err) {
+              console.error(`Ошибка при проверке процесса ${processName}:`, err)
+              resolve(false)
+              return
+            }
+            resolve(stdout.toLowerCase().includes(processName.toLowerCase()))
+          })
         })
-      })
+      }
+
+      // Функция для остановки процесса
+      const killProcess = (processName: string): Promise<void> => {
+        return new Promise((resolve) => {
+          exec(`taskkill /IM ${processName} /F`, (err) => {
+            if (err) {
+              console.error(`Ошибка при остановке ${processName}:`, err)
+            }
+            resolve()
+          })
+        })
+      }
+
+      // Последовательно проверяем и останавливаем процессы
+      const stopProcesses = async () => {
+        try {
+          // Проверяем и останавливаем sing-box
+          const isSingboxRunning = await isProcessRunning('sing-box.exe')
+          if (isSingboxRunning) {
+            console.log('Останавливаем sing-box...')
+            await killProcess('sing-box.exe')
+            console.log('sing-box остановлен')
+          } else {
+            console.log('sing-box не запущен')
+          }
+
+          // Проверяем и останавливаем Discord
+          const isDiscordRunning = await isProcessRunning('Discord.exe')
+          if (isDiscordRunning) {
+            console.log('Останавливаем Discord...')
+            await killProcess('Discord.exe')
+            console.log('Discord остановлен')
+          } else {
+            console.log('Discord не запущен')
+          }
+
+          resolve({ success: true })
+        } catch (error) {
+          console.error('Ошибка при остановке процессов:', error)
+          resolve({ success: false, error })
+        }
+      }
+
+      stopProcesses()
     } else {
-      exec('pkill sing-box', (err1) => {
-        exec('pkill discord', (err2) => {
-          if (err1 && err2) {
-            console.error('Не удалось остановить sing-box и discord:', err1, err2)
-            resolve({ success: false, error: { singbox: err1, discord: err2 } })
-          } else if (err1) {
-            console.error('Не удалось остановить sing-box:', err1)
-            resolve({ success: false, error: { singbox: err1 } })
-          } else if (err2) {
-            console.error('Не удалось остановить discord:', err2)
-            resolve({ success: false, error: { discord: err2 } })
-          } else {
-            resolve({ success: true })
-          }
+      // Функция для проверки существования процесса в Unix-системах
+      const isProcessRunning = (processName: string): Promise<boolean> => {
+        return new Promise((resolve) => {
+          exec(`pgrep ${processName}`, (err) => {
+            resolve(!err)
+          })
         })
-      })
+      }
+
+      // Функция для остановки процесса в Unix-системах
+      const killProcess = (processName: string): Promise<void> => {
+        return new Promise((resolve) => {
+          exec(`pkill ${processName}`, (err) => {
+            if (err) {
+              console.error(`Ошибка при остановке ${processName}:`, err)
+            }
+            resolve()
+          })
+        })
+      }
+
+      // Последовательно проверяем и останавливаем процессы
+      const stopProcesses = async () => {
+        try {
+          // Проверяем и останавливаем sing-box
+          const isSingboxRunning = await isProcessRunning('sing-box')
+          if (isSingboxRunning) {
+            console.log('Останавливаем sing-box...')
+            await killProcess('sing-box')
+            console.log('sing-box остановлен')
+          } else {
+            console.log('sing-box не запущен')
+          }
+
+          // Проверяем и останавливаем Discord
+          const isDiscordRunning = await isProcessRunning('discord')
+          if (isDiscordRunning) {
+            console.log('Останавливаем Discord...')
+            await killProcess('discord')
+            console.log('Discord остановлен')
+          } else {
+            console.log('Discord не запущен')
+          }
+
+          resolve({ success: true })
+        } catch (error) {
+          console.error('Ошибка при остановке процессов:', error)
+          resolve({ success: false, error })
+        }
+      }
+
+      stopProcesses()
     }
   })
 }
 
-export function runSingbox(configPath: string, singboxPath: string): void {
+export function runSingboxDiscord(configPath: string, singboxPath: string): void {
   const singboxExe = path.join(singboxPath, 'sing-box.exe')
 
   console.log('Запуск sing-box:')

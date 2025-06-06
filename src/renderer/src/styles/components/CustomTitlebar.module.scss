@@ -1,0 +1,163 @@
+.custom_titlebar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+  padding: 0 16px;
+  background: linear-gradient(to right, rgba(30, 32, 45, 0.98), rgba(37, 42, 68, 0.98));
+  color: #eee;
+  font-size: 0.9rem;
+  font-weight: 500;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-app-region: drag;
+  border-bottom: 1px solid rgba(75, 121, 230, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #4b79e6, transparent);
+    opacity: 0.3;
+  }
+
+  .titlebar_content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    -webkit-user-select: none;
+    user-select: none;
+    font-size: 0.85rem;
+    color: #ccc;
+  }
+
+  .titlebar_buttons {
+    display: flex;
+    gap: 0.5rem;
+    -webkit-app-region: no-drag;
+
+    button {
+      all: unset;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #eee;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: currentColor;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+
+        &::before {
+          opacity: 0.1;
+        }
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(0.95);
+      }
+
+      svg {
+        position: relative;
+        z-index: 1;
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    .minimize_button {
+      &:hover {
+        color: #4b79e6;
+      }
+    }
+
+    .maximize_button {
+      &:hover {
+        color: #4b79e6;
+      }
+    }
+
+    .close_button {
+      color: #f56565;
+
+      &:hover {
+        background: rgba(245, 101, 101, 0.1);
+        color: #ff6b6b;
+      }
+
+      &:active {
+        background: rgba(245, 101, 101, 0.2);
+      }
+    }
+  }
+
+  .vpn_status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    background: rgba(160, 255, 160, 0.1);
+    color: #a0ffa0;
+    transition: all 0.3s ease;
+
+    &::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    &.disconnected {
+      background: rgba(245, 101, 101, 0.1);
+      color: #f56565;
+    }
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom_titlebar {
+  animation: fadeIn 0.3s ease-out forwards;
+}
