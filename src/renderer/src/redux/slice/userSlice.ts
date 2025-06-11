@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import * as Sentry from '@sentry/electron/renderer'
 
 export type AdminLink = {
-  link: string
+  dbLink: string
+  clientLink: string
   expiryTime: string
   location: string
   _id: string
@@ -32,7 +33,7 @@ const initialState: UserInfoState = {
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string
-// Асинхронный thunk для загрузки данных
+
 export const fetchUserInfo = createAsyncThunk<UserInfoType, string, { rejectValue: string }>(
   'userInfo/fetchUserInfo',
   async (telegramId, thunkAPI) => {

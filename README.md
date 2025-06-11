@@ -5,8 +5,6 @@
 ![GitHub stars](https://img.shields.io/github/stars/Muhendalf-ru/pesherkino-vpn?style=social)
 ![Downloads](https://img.shields.io/github/downloads/Muhendalf-ru/pesherkino-vpn/total?style=flat-square)
 
-
-
 ---
 
 ## 🧰 Стек технологий

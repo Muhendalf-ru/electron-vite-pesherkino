@@ -22,36 +22,37 @@ const UserInfo: React.FC = () => {
   const { telegramId } = useTelegram()
   const dispatch = useDispatch<AppDispatch>()
 
-  const { data, loading, error } = useSelector((state: RootState) => state.userInfo)
+  const data = useSelector((state: RootState) => state.userInfo.data)
+  const loading = useSelector((state: RootState) => state.userInfo.loading)
+  const error = useSelector((state: RootState) => state.userInfo.error)
   const showLinks = useSelector((state: RootState) => state.ui.showLinks)
 
-  // Собираем все ссылки в один массив с мемоизацией
   const allLinks = useMemo<DisplayLink[]>(() => {
     if (!data) return []
     return [
-      ...data.vlessLinks.map(({ link, expiryTime, location, _id }) => ({
-        link,
+      ...(data.vlessLinks || []).map(({ clientLink, expiryTime, location, _id }) => ({
+        link: clientLink,
         expiryTime,
         location,
         _id,
         type: 'vless' as const
       })),
-      ...data.vlessLinksLite.map(({ link, expiryTime, location, _id }) => ({
-        link,
+      ...(data.vlessLinksLite || []).map(({ clientLink, expiryTime, location, _id }) => ({
+        link: clientLink,
         expiryTime,
         location,
         _id,
         type: 'vlessLite' as const
       })),
-      ...data.promoLinks.map(({ link, expiryTime, location, _id }) => ({
-        link,
+      ...(data.promoLinks || []).map(({ clientLink, expiryTime, location, _id }) => ({
+        link: clientLink,
         expiryTime,
         location,
         _id,
         type: 'promo' as const
       })),
-      ...data.adminLinks.map(({ link, expiryTime, location, _id }) => ({
-        link,
+      ...(data.adminLinks || []).map(({ clientLink, expiryTime, location, _id }) => ({
+        link: clientLink,
         expiryTime,
         location,
         _id,
@@ -60,14 +61,12 @@ const UserInfo: React.FC = () => {
     ]
   }, [data])
 
-  // Загрузка информации при появлении telegramId
   useEffect(() => {
     if (telegramId && !data) {
       dispatch(fetchUserInfo(telegramId))
     }
   }, [telegramId, dispatch, data])
 
-  // Проверка текущего выбранного региона из сохранённого конфига
   useEffect(() => {
     const checkConfig = async () => {
       if (allLinks.length === 0) return
@@ -85,7 +84,6 @@ const UserInfo: React.FC = () => {
     checkConfig()
   }, [allLinks])
 
-  // Проверка текущей ссылки из Electron
   useEffect(() => {
     const checkCurrentLink = async () => {
       if (allLinks.length === 0) return
@@ -150,8 +148,8 @@ const UserInfo: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Pesherkino VPN{' '}
-        </a>
+          Pesherkino VPN
+        </a>{' '}
         авторизация идет через Telegram ID.
       </p>
       <section className="section">
