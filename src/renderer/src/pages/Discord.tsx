@@ -24,7 +24,8 @@ function DiscordMenu({
   handleDeleteDiscordFiles,
   isDeleting,
   showWarning,
-  toggleWarning
+  toggleWarning,
+  requireTelegramId = false
 }) {
   return (
     <div className={`discord-container ${vpnRunning ? 'vpn-on' : 'vpn-off'}`}>
@@ -43,7 +44,11 @@ function DiscordMenu({
       <button
         onClick={handleRunVpnSetup}
         className="discord-button"
-        disabled={vpnRunning || status === 'Запуск...'}
+        disabled={
+          vpnRunning ||
+          status === 'Запуск...' ||
+          (requireTelegramId && (!telegramId || telegramId.trim() === ''))
+        }
       >
         {status === 'Запуск...' ? 'Запуск...' : 'Запустить'}
       </button>
@@ -89,8 +94,6 @@ function Discord(): React.JSX.Element {
 
   // Состояния и логика для первого меню (Discord VPN)
   const [vpnRunning, setVpnRunningLocal] = useState(false)
-  const [status1, setStatus1] = useState('')
-  const [isError1, setIsError1] = useState(false)
   const [isDeleting1, setIsDeleting1] = useState(false)
   const [showWarning1, setShowWarning1] = useState(false)
 
@@ -106,8 +109,8 @@ function Discord(): React.JSX.Element {
       setVpnRunningLocal(running)
       const savedId = await window.electronAPI.getTelegramId()
       if (!savedId) {
-        setStatus1('Error: Telegram ID not found. Please set it first.')
-        setIsError1(true)
+        dispatch(setStatus('Error: Telegram ID not found. Please set it first.'))
+        dispatch(setIsError(true))
       }
     }
     check()
@@ -153,41 +156,41 @@ function Discord(): React.JSX.Element {
   }
 
   const handleDeleteDiscordFiles = async (): Promise<void> => {
-    setStatus1('Deleting Discord files...')
-    setIsError1(false)
+    dispatch(setStatus('Deleting Discord files...'))
+    dispatch(setIsError(false))
     setIsDeleting1(true)
     try {
       const res = await window.electronAPI.deleteDiscordFiles()
       if (res.success) {
-        setStatus1('Discord files successfully deleted.')
+        dispatch(setStatus('Discord files successfully deleted.'))
       } else {
-        setStatus1(`Error during deletion: ${res.error}`)
-        setIsError1(true)
+        dispatch(setStatus(`Error during deletion: ${res.error}`))
+        dispatch(setIsError(true))
       }
     } catch (err) {
-      setStatus1(`Unexpected error: ${String(err)}`)
-      setIsError1(true)
+      dispatch(setStatus(`Unexpected error: ${String(err)}`))
+      dispatch(setIsError(true))
     } finally {
       setIsDeleting1(false)
     }
   }
 
   const handleStopVpn = async (): Promise<void> => {
-    setStatus1('Stopping VPN...')
-    setIsError1(false)
+    dispatch(setStatus('Stopping VPN...'))
+    dispatch(setIsError(false))
     try {
       const res = await window.electronAPI.stopVpn()
       if (res.success) {
-        setStatus1('VPN stopped successfully.')
+        dispatch(setStatus('VPN stopped successfully.'))
         setVpnRunningLocal(false)
         await window.electronAPI.updateDiscordStatus()
       } else {
-        setStatus1(`Error: ${res.error}`)
-        setIsError1(true)
+        dispatch(setStatus(`Error: ${res.error}`))
+        dispatch(setIsError(true))
       }
     } catch (err) {
-      setStatus1(`Unexpected error: ${String(err)}`)
-      setIsError1(true)
+      dispatch(setStatus(`Unexpected error: ${String(err)}`))
+      dispatch(setIsError(true))
     }
   }
 
@@ -286,6 +289,11 @@ function Discord(): React.JSX.Element {
     syncTelegramId()
   }, [dispatch, activeMenu])
 
+  useEffect(() => {
+    // Используем telegramId, чтобы подавить ошибку TS6133
+    void telegramId
+  }, [telegramId])
+
   return (
     <div className={styles['discord-wrapper']}>
       <div className={styles['discord-tabs']}>
@@ -325,8 +333,8 @@ function Discord(): React.JSX.Element {
           <DiscordMenu
             title="Discord VPN"
             vpnRunning={vpnRunning}
-            status={status1}
-            isError={isError1}
+            status={useSelector((state: RootState) => state.discord.status) || ''}
+            isError={useSelector((state: RootState) => state.discord.isError)}
             telegramId={telegramId}
             handleRunVpnSetup={handleRunVpnSetup}
             handleStopVpn={handleStopVpn}
@@ -334,11 +342,12 @@ function Discord(): React.JSX.Element {
             isDeleting={isDeleting1}
             showWarning={showWarning1}
             toggleWarning={() => setShowWarning1((v) => !v)}
+            requireTelegramId={true}
           />
         )}
         {activeMenu === 1 && (
           <DiscordMenu
-            title="Discord Free "
+            title="Discord Free"
             vpnRunning={patch.patchRunning}
             status={patch.status || ''}
             isError={patch.isError}
@@ -349,6 +358,7 @@ function Discord(): React.JSX.Element {
             isDeleting={isDeleting2}
             showWarning={showWarning2}
             toggleWarning={() => setShowWarning2((v) => !v)}
+            requireTelegramId={false}
           />
         )}
       </div>

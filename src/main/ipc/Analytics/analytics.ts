@@ -4,7 +4,7 @@ import { userConfigPath, configDir } from '../Config/configManager.ipc'
 import dotenv from 'dotenv'
 dotenv.config()
 
-import os from 'os'
+// import os from 'os'
 import { app } from 'electron'
 
 console.log('process.cwd():', process.cwd())
@@ -64,18 +64,18 @@ function getClientId(): string {
 export { getClientId }
 
 // Получение расширенной информации о системе и приложении
-function getDefaultParams() {
-  return {
-    app_version: app?.getVersion?.() || '',
-    os_platform: process.platform,
-    os_release: os.release(),
-    os_arch: process.arch,
-    lang: process.env.LANG || '',
-    node_version: process.version,
-    electron_version: process.versions?.electron || '',
-    timestamp: Date.now(),
-  }
-}
+// function getDefaultParams() {
+//   return {
+//     app_version: app?.getVersion?.() || '',
+//     os_platform: process.platform,
+//     os_release: os.release(),
+//     os_arch: process.arch,
+//     lang: process.env.LANG || '',
+//     node_version: process.version,
+//     electron_version: process.versions?.electron || '',
+//     timestamp: Date.now(),
+//   }
+// }
 
 // Генерация уникального session_id для каждой сессии запуска
 function generateSessionId() {
@@ -87,7 +87,6 @@ let engagementInterval: NodeJS.Timeout | null = null
 
 export function initAnalytics(mainScreenName = 'Main') {
   session_id = generateSessionId()
-  const client_id = getClientId()
 
   // Событие app_open (GA4 стандарт)
   sendEvent('app_open', { session_id})
