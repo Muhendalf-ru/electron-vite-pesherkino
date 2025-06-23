@@ -2,6 +2,7 @@ import React from 'react'
 import DiscordRpcToggle from '../components/DiscordRPC'
 import OpenFolders from '../components/OpenFolders'
 import Speedtest from '@renderer/components/SpeedTest'
+import DiscordPathInput from '@renderer/components/DiscordFilePatch'
 
 const Settings: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const Settings: React.FC = () => {
         />
       </div>
       <OpenFolders />
+      <DiscordPathInput/>
       <Speedtest />
       <p className="warning-text-user">⚡️ Скоро: Возможность менять PORT вашего Proxy</p>
     </div>

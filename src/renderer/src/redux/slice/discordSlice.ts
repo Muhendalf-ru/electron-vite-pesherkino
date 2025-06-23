@@ -6,13 +6,15 @@ export interface DiscordState {
   vpnRunning: boolean
   status: string | null
   isError: boolean
+  activeMenu: number // 0 - VPN, 1 - Patch
 }
 
 const initialState: DiscordState = {
   telegramId: null,
   vpnRunning: false,
   status: null,
-  isError: false
+  isError: false,
+  activeMenu: 0
 }
 
 const discordSlice = createSlice({
@@ -31,6 +33,9 @@ const discordSlice = createSlice({
     setIsError(state, action: PayloadAction<boolean>) {
       state.isError = action.payload
     },
+    setActiveMenu(state, action: PayloadAction<number>) {
+      state.activeMenu = action.payload
+    },
     resetStatus(state) {
       state.status = null
       state.isError = false
@@ -38,7 +43,7 @@ const discordSlice = createSlice({
   }
 })
 
-export const { setTelegramId, setVpnRunning, setStatus, setIsError, resetStatus } =
+export const { setTelegramId, setVpnRunning, setStatus, setIsError, setActiveMenu, resetStatus } =
   discordSlice.actions
 
 export default discordSlice.reducer

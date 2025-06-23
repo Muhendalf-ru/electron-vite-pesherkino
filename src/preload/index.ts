@@ -8,6 +8,9 @@ const api = {
   stopVpn: () => ipcRenderer.invoke('stop-vpn'),
   saveTelegramId: (id: string) => ipcRenderer.invoke('save-telegram-id', id),
   deleteDiscordFiles: () => ipcRenderer.invoke('delete-discord-files'),
+  copyFreeFiles: () => ipcRenderer.invoke('copy-free-files'),
+  deleteFreePatchFiles: () => ipcRenderer.invoke('delete-free-patch-files'),
+  runDiscord: () => ipcRenderer.invoke('run-discord'),
   checkForUpdates: () => ipcRenderer.send('check-for-updates'),
   onUpdateMessage: (callback: (msg: string) => void) =>
     ipcRenderer.on('update-message', (_, msg) => callback(msg)),
@@ -78,7 +81,13 @@ const api = {
   readUserConfig: () => ipcRenderer.invoke('read-user-config'),
   generateConfigFromLink: (link: string) => ipcRenderer.invoke('generate-config-from-link', link),
   saveTunConfig: (config: any) => ipcRenderer.invoke('save-tun-config', config),
-  runSingbox: () => ipcRenderer.invoke('run-singbox')
+  runSingbox: () => ipcRenderer.invoke('run-singbox'),
+
+  getDiscordPath: () => ipcRenderer.invoke('config:getDiscordPath'),
+  setDiscordPath: (path: string) => ipcRenderer.invoke('config:setDiscordPath', path),
+  selectDiscordPath: () => ipcRenderer.invoke('select-discord-path'),
+
+  isDiscordRunning: () => ipcRenderer.invoke('is-discord-running'),
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

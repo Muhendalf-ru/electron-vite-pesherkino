@@ -8,3 +8,5 @@ resources/telegram_id.txt
 resources/config.json
 resources/console
 .env
+resources/dll/drover.ini
+resources/dll/version.dll

@@ -8,6 +8,9 @@ declare global {
       checkVpnStatus: () => Promise<boolean>
       stopVpn: () => Promise<{ success: boolean; error?: string }>
       deleteDiscordFiles: () => Promise<{ success: boolean; error?: string }>
+      copyFreeFiles: () => Promise<{ success: boolean; error?: string }>
+      deleteFreePatchFiles: () => Promise<{ success: boolean; error?: string }>
+      runDiscord: () => Promise<{ success: boolean; error?: string }>
       saveTelegramId: (id: string) => Promise<{ success: boolean; error?: string }>
       minimize?: () => void
       close?: () => void
@@ -49,6 +52,11 @@ declare global {
       generateConfigFromLink: (link: string) => Promise<any>
       saveTunConfig: (config: any) => Promise<boolean>
       runSingbox: () => Promise<void>
+
+      getDiscordPath: () => Promise<string>
+      setDiscordPath: (path: string) => Promise<void>
+      selectDiscordPath: () => Promise<string>
+      isDiscordRunning: () => Promise<{ running: boolean }>
     }
   }
 }

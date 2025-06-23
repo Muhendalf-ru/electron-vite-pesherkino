@@ -11,12 +11,14 @@ import './ipc/utils/utils.ipc'
 import './ipc/Window/window.ipc'
 import './ipc/Speedtest/speedtest.ipc'
 import './ipc/Process/processManager.ipc'
+// import './ipc/Analytics/analytics'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { stopDiscordRPC } from './DiscordRpc/discordPresence'
 import { stopSingboxAndDiscord } from './ipc/Singbox/singbox'
-import { startDiscordRpcWatcher } from './ipc/Discord/discord'
+import { initializeDiscordPathConfig, startDiscordRpcWatcher } from './ipc/Discord/discord'
 import { stopVpnStatusWatcher } from './ipc/Proxy/proxy'
 import * as Sentry from '@sentry/electron/main'
+import { initAnalytics, sendEvent } from './ipc/Analytics/analytics'
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -105,7 +107,17 @@ function setupApp(): void {
 
 app.whenReady().then(async () => {
   setupApp()
+  await initializeDiscordPathConfig()
   await startDiscordRpcWatcher()
+
+  initAnalytics('Main')
+
+  await sendEvent('app_start', {
+    platform: process.platform,
+    arch: process.arch,
+    electron_version: process.versions.electron,
+    app_version: app.getVersion(),
+  })
 })
 
 app.on('window-all-closed', async () => {
